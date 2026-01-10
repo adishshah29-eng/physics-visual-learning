@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--fontSans);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --shadow-custom: var(--shadow-custom);
+}
+
+:root {
+  --fontSans: "Inter", system-ui, -apple-system, sans-serif;
+  
+  /* Deep Space Dark Theme (Default) */
+  --background: rgb(5, 6, 12);
+  --foreground: rgb(226, 232, 240);
+  
+  --card: rgba(15, 23, 42, 0.6);
+  --card-foreground: rgb(241, 245, 249);
+  
+  --popover: rgb(15, 23, 42);
+  --popover-foreground: rgb(241, 245, 249);
+  
+  --primary: rgb(56, 189, 248); /* Sky 400 - Science Blue */
+  --primary-foreground: rgb(15, 23, 42);
+  
+  --secondary: rgba(30, 41, 59, 0.5);
+  --secondary-foreground: rgb(248, 250, 252);
+  
+  --muted: rgba(30, 41, 59, 0.5);
+  --muted-foreground: rgb(148, 163, 184);
+  
+  --accent: rgba(56, 189, 248, 0.1);
+  --accent-foreground: rgb(56, 189, 248);
+  
+  --destructive: rgb(239, 68, 68);
+  --destructive-foreground: rgb(255, 255, 255);
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: rgba(56, 189, 248, 0.5);
+  
+  --radius: 0.75rem;
+  
+  /* Shadow variables for shadow-custom utility */
+  --shadow-x: 0px;
+  --shadow-y: 8px;
+  --shadow-blur: 24px;
+  --shadow-spread: -4px;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--fontSans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(14, 20, 35, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-nav {
+  background: rgba(5, 6, 12, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.4);
+}
+
+@layer utilities {
+  .shadow-custom {
+    box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread) var(--shadow-color);
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "src": "src/pages/Dashboard.tsx"
+    },
+    {
+      "path": "/learn/projectile-motion",
+      "src": "src/pages/LearningStudio.tsx"
+    }
+  ],
+  "components": [
+    {"name": "Navbar", "src": "src/components/Navbar.tsx"},
+    {"name": "SimulationPanel", "src": "src/components/SimulationPanel.tsx"},
+    {"name": "TutorPanel", "src": "src/components/TutorPanel.tsx"},
+    {"name": "ChapterCard", "src": "src/components/ChapterCard.tsx"}
+  ]
+}
