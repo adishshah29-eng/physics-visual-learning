@@ -12,6 +12,7 @@ const chapters: Chapter[] = [
     status: "active",
     description:
       "Fundamental dimensions, error analysis, and significant figures.",
+    route: "/learn/units",
   },
   {
     id: "03",
@@ -29,6 +30,7 @@ const chapters: Chapter[] = [
     status: "active",
     description:
       "Motion in a plane, trajectory analysis, and range calculations.",
+    route: "/learn/projectile-motion",
   },
   {
     id: "05",
@@ -97,7 +99,6 @@ const chapters: Chapter[] = [
 ];
 
 const Dashboard: React.FC = () => {
-  // Group by class for better organization
   const class11 = chapters.filter((c) => c.class === "11");
   const class12 = chapters.filter((c) => c.class === "12");
 
@@ -110,34 +111,34 @@ const Dashboard: React.FC = () => {
         <header className="mb-10 sm:mb-12 text-center relative">
           <div
             className="
-          absolute top-1/2 left-1/2 
-          -translate-x-1/2 -translate-y-1/2 
-          w-[280px] h-[160px] 
-          sm:w-[400px] sm:h-[220px] 
-          md:w-[600px] md:h-[300px]
-          bg-primary/10 blur-[80px] sm:blur-[100px]
-          rounded-full pointer-events-none -z-10
-        "
+              absolute top-1/2 left-1/2 
+              -translate-x-1/2 -translate-y-1/2 
+              w-[280px] h-[160px] 
+              sm:w-[400px] sm:h-[220px] 
+              md:w-[600px] md:h-[300px]
+              bg-primary/10 blur-[80px] sm:blur-[100px]
+              rounded-full pointer-events-none -z-10
+            "
           />
 
           <h1
             className="
-          text-2xl sm:text-3xl md:text-4xl lg:text-5xl
-          font-light mb-3 sm:mb-4
-          text-transparent bg-clip-text 
-          bg-gradient-to-b from-white to-white/50
-        "
+              text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+              font-light mb-3 sm:mb-4
+              text-transparent bg-clip-text 
+              bg-gradient-to-b from-white to-white/50
+            "
           >
             Physics Curriculum
           </h1>
 
           <p
             className="
-          text-sm sm:text-base md:text-lg
-          text-muted-foreground 
-          max-w-xl sm:max-w-2xl 
-          mx-auto font-light
-        "
+              text-sm sm:text-base md:text-lg
+              text-muted-foreground 
+              max-w-xl sm:max-w-2xl 
+              mx-auto font-light
+            "
           >
             Advanced simulation-based learning for JEE Main & Advanced.
           </p>
@@ -153,12 +154,12 @@ const Dashboard: React.FC = () => {
 
             <div
               className="
-            grid grid-cols-1 
-            sm:grid-cols-2 
-            lg:grid-cols-3 
-            xl:grid-cols-4 
-            gap-4 sm:gap-6
-          "
+                grid grid-cols-1 
+                sm:grid-cols-2 
+                lg:grid-cols-3 
+                xl:grid-cols-4 
+                gap-4 sm:gap-6
+              "
             >
               {class11.map((chapter) => (
                 <ChapterCard key={chapter.id} chapter={chapter} />
@@ -173,11 +174,11 @@ const Dashboard: React.FC = () => {
               <div className="h-px bg-white/10 flex-1"></div>
               <span
                 className="
-              text-[10px] sm:text-xs 
-              uppercase tracking-widest 
-              text-muted-foreground 
-              bg-secondary px-2 py-1 rounded
-            "
+                  text-[10px] sm:text-xs 
+                  uppercase tracking-widest 
+                  text-muted-foreground 
+                  bg-secondary px-2 py-1 rounded
+                "
               >
                 Locked
               </span>
@@ -185,14 +186,14 @@ const Dashboard: React.FC = () => {
 
             <div
               className="
-            grid grid-cols-1 
-            sm:grid-cols-2 
-            lg:grid-cols-3 
-            xl:grid-cols-4 
-            gap-4 sm:gap-6 
-            grayscale hover:grayscale-0 
-            transition-all duration-500
-          "
+                grid grid-cols-1 
+                sm:grid-cols-2 
+                lg:grid-cols-3 
+                xl:grid-cols-4 
+                gap-4 sm:gap-6 
+                grayscale hover:grayscale-0 
+                transition-all duration-500
+              "
             >
               {class12.map((chapter) => (
                 <ChapterCard key={chapter.id} chapter={chapter} />

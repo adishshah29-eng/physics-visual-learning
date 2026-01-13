@@ -1,19 +1,25 @@
-import React from 'react';
-import Navbar from '../components/Navbar';
-import SimulationPanel from '../components/SimulationPanel';
-import TutorPanel from '../components/TutorPanel';
+import React from "react";
+import Navbar from "../components/Navbar";
+import SimulationPanel from "../components/SimulationPanel";
+import TutorPanel from "../components/common/TutorPanel";
 
-    const LearningStudio: React.FC = () => {
+import ProjectileExplore from "../components/chapters/projectile/Explore";
+import ProjectileUnderstand from "../components/chapters/projectile/Understand";
+import ProjectilePractice from "../components/chapters/projectile/practice/PracticeTab";
+
+const LearningStudio: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar currentChapter="CH-04: Projectile Motion" />
 
-      <main className="
-        flex-1 
-        pt-16 
-        px-2 sm:px-4 
-        pb-4
-      ">
+      <main
+        className="
+          flex-1 
+          pt-16 
+          px-2 sm:px-4 
+          pb-4
+        "
+      >
         <div
           className="
             grid grid-cols-1 
@@ -38,7 +44,11 @@ import TutorPanel from '../components/TutorPanel';
               overflow-hidden
             "
           >
-            <TutorPanel />
+            <TutorPanel
+              Explore={ProjectileExplore}
+              Understand={ProjectileUnderstand}
+              Practice={ProjectilePractice}
+            />
           </div>
         </div>
       </main>

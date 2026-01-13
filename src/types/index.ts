@@ -6,4 +6,5 @@ export interface Chapter {
   category: 'mechanics' | 'electromagnetism' | 'optics' | 'modern' | 'thermodynamics';
   description?: string;
   progress?: number;
+  route?: string;
 }
