@@ -1,8 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import SimulationPanel from "../components/SimulationPanel";
+//import SimulationPanel from "../components/SimulationPanel";
 import TutorPanel from "../components/common/TutorPanel";
-
+import ProjectilePlayground from "@/components/chapters/projectile/Playground";
 import ProjectileExplore from "../components/chapters/projectile/Explore";
 import ProjectileUnderstand from "../components/chapters/projectile/Understand";
 import ProjectilePractice from "../components/chapters/projectile/practice/PracticeTab";
@@ -30,7 +30,7 @@ const LearningStudio: React.FC = () => {
         >
           {/* Simulation */}
           <div className="lg:col-span-2 min-h-[60vh] lg:min-h-full">
-            <SimulationPanel />
+            <ProjectilePlayground />
           </div>
 
           {/* Tutor */}
@@ -45,9 +45,9 @@ const LearningStudio: React.FC = () => {
             "
           >
             <TutorPanel
-              Explore={ProjectileExplore}
-              Understand={ProjectileUnderstand}
-              Practice={ProjectilePractice}
+              Explore={<ProjectileExplore/>}
+              Understand={<ProjectileUnderstand/>}
+              Practice={<ProjectilePractice/>}
             />
           </div>
         </div>

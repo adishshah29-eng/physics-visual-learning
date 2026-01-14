@@ -22,14 +22,26 @@ const UnitConverter = () => {
 
   return (
     <div className="space-y-6">
-
-      <h3 className="text-lg font-medium">
-        Unit Conversion Playground
-      </h3>
+      <h3 className="text-lg font-medium">Unit Conversion Playground</h3>
 
       {/* ================= Quantity Selector ================= */}
-      <div className="flex gap-2">
-        {(["length", "mass", "time"] as Quantity[]).map(q => (
+      <div className="flex flex-wrap gap-2">
+        {(
+          [
+            "length",
+            "mass",
+            "time",
+            "area",
+            "volume",
+            "speed",
+            "acceleration",
+            "force",
+            "energy",
+            "power",
+            "pressure",
+            "density",
+          ] as Quantity[]
+        ).map((q) => (
           <button
             key={q}
             onClick={() => {
@@ -57,16 +69,16 @@ const UnitConverter = () => {
           type="number"
           placeholder="Enter value"
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
           className="bg-secondary p-2 rounded text-sm outline-none"
         />
 
         <select
           value={fromUnit}
-          onChange={e => setFromUnit(e.target.value)}
+          onChange={(e) => setFromUnit(e.target.value)}
           className="bg-secondary p-2 rounded text-sm"
         >
-          {Object.keys(units).map(u => (
+          {Object.keys(units).map((u) => (
             <option key={u} value={u}>
               {u}
             </option>
@@ -81,21 +93,17 @@ const UnitConverter = () => {
       <div className="grid grid-cols-2 gap-4">
         <input
           disabled
-          value={
-            converted === ""
-              ? ""
-              : Number(converted).toPrecision(6)
-          }
+          value={converted === "" ? "" : Number(converted).toPrecision(6)}
           placeholder="Result"
           className="bg-secondary p-2 rounded text-sm"
         />
 
         <select
           value={toUnit}
-          onChange={e => setToUnit(e.target.value)}
+          onChange={(e) => setToUnit(e.target.value)}
           className="bg-secondary p-2 rounded text-sm"
         >
-          {Object.keys(units).map(u => (
+          {Object.keys(units).map((u) => (
             <option key={u} value={u}>
               {u}
             </option>
