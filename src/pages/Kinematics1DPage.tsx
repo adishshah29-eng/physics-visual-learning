@@ -5,7 +5,7 @@ import TutorPanel from "../components/common/TutorPanel";
 import Explore from "@/components/chapters/Kinematics1d/Explore";
 import Understand from "@/components/chapters/Kinematics1d/Understand";
 import Playground from "@/components/chapters/Kinematics1d/Playground";
-
+import PracticeTab from "@/components/chapters/Kinematics1d/practice/PracticeTab";
 const Kinematics1D: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -13,7 +13,6 @@ const Kinematics1D: React.FC = () => {
 
       <main className="flex-1 pt-16 px-2 sm:px-4 pb-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
-
           {/* Playground */}
           <div className="lg:col-span-2 border border-border rounded-lg bg-secondary/10 p-4">
             <Playground />
@@ -24,10 +23,9 @@ const Kinematics1D: React.FC = () => {
             <TutorPanel
               Explore={<Explore />}
               Understand={<Understand />}
-              Practice={null}
+              Practice={<PracticeTab />}
             />
           </div>
-
         </div>
       </main>
     </div>
