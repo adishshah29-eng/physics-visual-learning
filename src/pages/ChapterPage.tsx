@@ -14,6 +14,9 @@ const simulations = {
   'circular-motion': lazy(() => import('@/components/chapters/circular-motion/Playground')),
   'shm': lazy(() => import('@/components/chapters/shm/Playground')),
   'rotational-motion': lazy(() => import('@/components/chapters/rotational-motion/Playground')),
+  'gravitation': lazy(() => import('@/components/chapters/gravitation/Playground')),
+  'thermodynamics': lazy(() => import('@/components/chapters/thermodynamics/Playground')),
+  'waves': lazy(() => import('@/components/chapters/waves/Playground')),
 };
 
 // Units
@@ -56,6 +59,21 @@ import ExploreRotational from '@/components/chapters/rotational-motion/Explore';
 import UnderstandRotational from '@/components/chapters/rotational-motion/Understand';
 import PracticeRotational from '@/components/chapters/rotational-motion/practice/PracticeTab';
 
+// Gravitation
+import ExploreGravitation from '@/components/chapters/gravitation/Explore';
+import UnderstandGravitation from '@/components/chapters/gravitation/Understand';
+import PracticeGravitation from '@/components/chapters/gravitation/practice/PracticeTab';
+
+// Thermodynamics
+import ExploreThermo from '@/components/chapters/thermodynamics/Explore';
+import UnderstandThermo from '@/components/chapters/thermodynamics/Understand';
+import PracticeThermo from '@/components/chapters/thermodynamics/practice/PracticeTab';
+
+// Waves
+import ExploreWaves from '@/components/chapters/waves/Explore';
+import UnderstandWaves from '@/components/chapters/waves/Understand';
+import PracticeWaves from '@/components/chapters/waves/practice/PracticeTab';
+
 const contentMap: Record<string, any> = {
   'units': {
     Explore: ExploreUnits,
@@ -96,6 +114,21 @@ const contentMap: Record<string, any> = {
     Explore: ExploreRotational,
     Understand: UnderstandRotational,
     Practice: PracticeRotational
+  },
+  'gravitation': {
+    Explore: ExploreGravitation,
+    Understand: UnderstandGravitation,
+    Practice: PracticeGravitation
+  },
+  'thermodynamics': {
+    Explore: ExploreThermo,
+    Understand: UnderstandThermo,
+    Practice: PracticeThermo
+  },
+  'waves': {
+    Explore: ExploreWaves,
+    Understand: UnderstandWaves,
+    Practice: PracticeWaves
   },
 };
 

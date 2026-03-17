@@ -105,7 +105,7 @@ export const chapters: Chapter[] = [
     title: "Gravitation",
     class: "11",
     category: "mechanics",
-    status: "locked",
+    status: "active",
     description: "Kepler's laws, universal law of gravitation, gravitational potential.",
     simulationComponent: "",
     difficulty: "foundation"
@@ -116,7 +116,7 @@ export const chapters: Chapter[] = [
     title: "Thermodynamics",
     class: "11",
     category: "thermodynamics",
-    status: "locked",
+    status: "active",
     description: "Laws of thermodynamics, heat engines, entropy.",
     simulationComponent: "",
     difficulty: "intermediate"
@@ -127,7 +127,7 @@ export const chapters: Chapter[] = [
     title: "Waves",
     class: "11",
     category: "mechanics",
-    status: "locked",
+    status: "active",
     description: "Wave equation, superposition, Doppler effect, sound waves.",
     simulationComponent: "",
     difficulty: "intermediate"
