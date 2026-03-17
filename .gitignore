@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+JEE_Main_PDFs/
+JEE_Main_PDFs.zip
