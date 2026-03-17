@@ -1,10 +1,8 @@
-export interface Chapter {
-  id: string;
-  title: string;
-  class: '11' | '12';
-  status: 'active' | 'coming_soon' | 'locked';
-  category: 'mechanics' | 'electromagnetism' | 'optics' | 'modern' | 'thermodynamics';
-  description?: string;
-  progress?: number;
-  route?: string;
+import { Chapter as ConfigChapter } from '../config/chapters';
+
+export type Chapter = ConfigChapter;
+
+export interface Message {
+  role: 'user' | 'model';
+  text: string;
 }
