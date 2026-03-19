@@ -26,3 +26,9 @@ dist-ssr
 
 JEE_Main_PDFs/
 JEE_Main_PDFs.zip
+
+# MCQ Data
+mcqs/
+scripts/map_physics.js
+scripts/physics_to_csv.js
+scripts/get_chapters.js
