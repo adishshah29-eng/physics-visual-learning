@@ -38,9 +38,9 @@ const Dashboard: React.FC = () => {
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-sky-500 opacity-10 blur-[100px]"></div>
       </div>
 
-      <main className="relative z-10 pt-24 px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
+      <main className="relative z-10 pt-28 md:pt-24 px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
         {/* HEADER */}
-        <header className="mb-12 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-800 pb-8">
+        <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-800 pb-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-2">
               PHYSICS.
@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-sky-500/10 rounded-lg text-lg">⚡</div>
                 <h2 className="text-2xl font-semibold text-white">Class 11</h2>
-                <span className="text-xs font-mono text-slate-500 ml-auto border border-slate-800 px-2 py-1 rounded">
+                <span className="hidden sm:inline text-xs font-mono text-slate-500 ml-auto border border-slate-800 px-2 py-1 rounded">
                   Core Mechanics & Thermodynamics
                 </span>
               </div>

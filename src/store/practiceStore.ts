@@ -19,10 +19,12 @@ interface PracticeState {
   startSession: (questions: Question[]) => void;
   submitAnswer: (questionId: string, option: string, timeTaken: number, isCorrect: boolean) => void;
   nextQuestion: () => void;
+  previousQuestion: () => void;
+  setQuestionIndex: (index: number) => void;
+  setSessionAttempts: (attempts: Attempt[]) => void;
   endSession: () => void;
   resetSession: () => void;
 }
-
 export const usePracticeStore = create<PracticeState>((set, get) => ({
   selectedExam: null,
   selectedSubject: null,
@@ -78,6 +80,31 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
         currentQuestion: sessionQuestions[nextIndex],
       });
     }
+  },
+
+  previousQuestion: () => {
+    const { currentQuestionIndex, sessionQuestions } = get();
+    const prevIndex = currentQuestionIndex - 1;
+    if (prevIndex >= 0) {
+      set({
+        currentQuestionIndex: prevIndex,
+        currentQuestion: sessionQuestions[prevIndex],
+      });
+    }
+  },
+
+  setQuestionIndex: (index: number) => {
+    const { sessionQuestions } = get();
+    if (index >= 0 && index < sessionQuestions.length) {
+      set({
+        currentQuestionIndex: index,
+        currentQuestion: sessionQuestions[index],
+      });
+    }
+  },
+
+  setSessionAttempts: (attempts: Attempt[]) => {
+    set({ sessionAttempts: attempts });
   },
 
   endSession: () => {

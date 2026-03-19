@@ -100,13 +100,13 @@ const Leaderboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
-      <main className="pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
+      <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Leaderboard</h1>
         <p className="text-slate-400 mb-8">See how you rank among your peers.</p>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-8">
+          <div className="flex flex-wrap gap-2">
             {batchTabs.map((tab) => (
               <button
                 key={tab.value}
@@ -121,7 +121,7 @@ const Leaderboard: React.FC = () => {
               </button>
             ))}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {timeTabs.map((tab) => (
               <button
                 key={tab.value}
@@ -221,9 +221,9 @@ const Leaderboard: React.FC = () => {
                     <span className="text-sm font-semibold text-sky-400">Your Rank: #{userRank}</span>
                     <span className="text-xs text-slate-400">{userEntry.total_score} pts</span>
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-slate-400">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
                     <span>{userEntry.questions_solved} solved</span>
-                    <span>{Math.round(userEntry.accuracy * 100)}% accuracy</span>
+                    <span>{Math.round(userEntry.accuracy * 100)}% acc</span>
                     <span>🔥 {userEntry.streak_days}</span>
                   </div>
                 </div>

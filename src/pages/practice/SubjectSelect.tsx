@@ -112,7 +112,7 @@ const SubjectSelect: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
-      <main className="pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto">
+      <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto">
         <div className="mb-10">
           <Link to="/practice" className="text-sm text-slate-500 hover:text-slate-400 mb-4 inline-block">
             ← Back to Exams

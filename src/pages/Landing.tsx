@@ -52,7 +52,7 @@ const Landing: React.FC = () => {
 
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass-nav">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-sky-400">
             <Atom className="w-6 h-6" />
             <span className="font-bold tracking-wider text-lg">PHYSICS.LAB</span>

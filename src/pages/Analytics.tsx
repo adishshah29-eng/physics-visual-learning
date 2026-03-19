@@ -89,7 +89,7 @@ const Analytics: React.FC = () => {
           .select('streak_days')
           .eq('user_id', user.id)
           .single();
-        setStreak(lb?.streak_days || 0);
+        setStreak((lb as any)?.streak_days ?? 0);
 
         // Actual Difficulty breakdown using joined questions data
         let easyCount = 0;
@@ -171,7 +171,7 @@ const Analytics: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
-      <main className="pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
+      <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Analytics</h1>
         <p className="text-slate-400 mb-8">Track your progress and performance.</p>
 
@@ -190,18 +190,18 @@ const Analytics: React.FC = () => {
         )}
 
         {/* Section 1: Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-10">
           {[
             { icon: Target, label: 'Questions Solved', value: totalSolved, color: 'text-sky-400' },
             { icon: TrendingUp, label: 'Accuracy', value: `${overallAccuracy}%`, color: 'text-emerald-400' },
             { icon: Flame, label: 'Streak', value: `${streak} days`, color: 'text-orange-400' },
-            { icon: BookOpen, label: 'Predicted Score', value: predictedScore, color: 'text-violet-400' },
+            { icon: BookOpen, label: 'Pred. Score', value: predictedScore, color: 'text-violet-400' },
             { icon: Clock, label: 'Study Time', value: `${studyTime}h`, color: 'text-amber-400' },
           ].map((stat) => (
-            <div key={stat.label} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+            <div key={stat.label} className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
               <stat.icon className={`w-4 h-4 ${stat.color} mb-2`} />
-              <div className="text-xl font-bold text-white">{stat.value}</div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">{stat.label}</div>
+              <div className="text-lg sm:text-xl font-bold text-white">{stat.value}</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider leading-tight">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -218,8 +218,8 @@ const Analytics: React.FC = () => {
                   <ResponsiveContainer width="100%" height={280}>
                     <LineChart data={dailyData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 11 }} />
-                      <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                      <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 10 }} interval="preserveStartEnd" />
+                      <YAxis tick={{ fill: '#64748b', fontSize: 10 }} width={30} />
                       <Tooltip
                         contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#e2e8f0' }}
                       />
@@ -286,8 +286,8 @@ const Analytics: React.FC = () => {
                       fill: k.mastery < 0.4 ? '#ef4444' : k.mastery < 0.7 ? '#f59e0b' : '#10b981',
                     }))} layout="vertical">
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis type="number" domain={[0, 100]} tick={{ fill: '#64748b', fontSize: 11 }} />
-                      <YAxis type="category" dataKey="chapter" width={150} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                      <XAxis type="number" domain={[0, 100]} tick={{ fill: '#64748b', fontSize: 10 }} />
+                      <YAxis type="category" dataKey="chapter" width={100} tick={{ fill: '#94a3b8', fontSize: 10 }} />
                       <Tooltip
                         contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#e2e8f0' }}
                         formatter={(value: number) => [`${value}%`, 'Mastery']}
@@ -372,7 +372,7 @@ const Analytics: React.FC = () => {
               <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
                 Difficulty Breakdown
               </h2>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-6 flex flex-col items-center md:flex-row gap-6">
                 <div className="w-48 h-48">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>

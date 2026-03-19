@@ -132,7 +132,7 @@ const Onboarding: React.FC = () => {
         </div>
 
         {/* Step Content */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-8">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-8">
           {errorMsg && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
               {errorMsg}

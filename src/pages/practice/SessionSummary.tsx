@@ -74,7 +74,7 @@ const SessionSummary: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
-      <main className="pt-24 pb-16 px-4 sm:px-6 max-w-3xl mx-auto">
+      <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold mb-8 text-center">Session Summary</h1>
 
         {/* Score Circle */}
@@ -108,19 +108,19 @@ const SessionSummary: React.FC = () => {
 
         {/* Stats Row */}
         <div className="grid grid-cols-3 gap-4 mb-10">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-center">
             <Clock className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-white">{formatTime(totalTime)}</div>
+            <div className="text-base sm:text-lg font-bold text-white">{formatTime(totalTime)}</div>
             <div className="text-[10px] text-slate-500 uppercase tracking-wider">Time Taken</div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-center">
             <Target className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-white">{accuracy}%</div>
+            <div className="text-base sm:text-lg font-bold text-white">{accuracy}%</div>
             <div className="text-[10px] text-slate-500 uppercase tracking-wider">Accuracy</div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-center">
             <BarChart3 className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-white">{avgTimePerQuestion}s</div>
+            <div className="text-base sm:text-lg font-bold text-white">{avgTimePerQuestion}s</div>
             <div className="text-[10px] text-slate-500 uppercase tracking-wider">Avg/Question</div>
           </div>
         </div>

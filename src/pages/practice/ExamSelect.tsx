@@ -91,7 +91,7 @@ const ExamSelect: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
-      <main className="pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto">
+      <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">MCQ Practice</h1>
         <p className="text-slate-400 mb-10">Choose your exam to start practicing.</p>
 

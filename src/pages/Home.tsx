@@ -56,10 +56,11 @@ const Home: React.FC = () => {
           .select('streak_days')
           .eq('user_id', user.id)
           .single();
+        const streakDays = (leaderboard as any)?.streak_days ?? 0;
 
         setStats({
           solvedToday: todayAttempts.length,
-          streak: leaderboard?.streak_days || 0,
+          streak: streakDays ?? 0,
           accuracy: accuracyVal || readiness,
           predictedScore: predicted,
         });
@@ -102,7 +103,7 @@ const Home: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
 
-      <main className="pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
+      <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
         {/* Greeting */}
         <div className="mb-10">
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
@@ -180,36 +181,36 @@ const Home: React.FC = () => {
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
             Today&apos;s Summary
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
-                <Target className="w-3.5 h-3.5" /> Questions Solved
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+              <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
+                <Target className="w-3.5 h-3.5 shrink-0" /> <span className="truncate">Questions Solved</span>
               </div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white">
                 {isLoading ? '—' : stats.solvedToday}
               </div>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
-                <Flame className="w-3.5 h-3.5 text-orange-400" /> Streak
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+              <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
+                <Flame className="w-3.5 h-3.5 text-orange-400 shrink-0" /> Streak
               </div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white">
                 {isLoading ? '—' : `${stats.streak} days`}
               </div>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
-                <BarChart3 className="w-3.5 h-3.5" /> Accuracy
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+              <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
+                <BarChart3 className="w-3.5 h-3.5 shrink-0" /> Accuracy
               </div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white">
                 {isLoading ? '—' : `${stats.accuracy}%`}
               </div>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
-                <TrendingUp className="w-3.5 h-3.5 text-sky-400" /> Predicted Score
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+              <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
+                <TrendingUp className="w-3.5 h-3.5 text-sky-400 shrink-0" /> <span className="truncate">Predicted Score</span>
               </div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white">
                 {isLoading ? '—' : stats.predictedScore}
                 <span className="text-sm text-slate-500 font-normal ml-1">
                   / {profile?.target_exam === 'mht-cet' ? 200 : 300}
