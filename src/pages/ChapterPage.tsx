@@ -22,113 +22,91 @@ const simulations = {
 // Units
 import ExploreUnits from '@/components/chapters/units/Explore';
 import UnderstandUnits from '@/components/chapters/units/Understand';
-import PracticeUnits from '@/components/chapters/units/practice/PracticeTab';
 
 // Kinematics 1D
 import ExploreKinematics from '@/components/chapters/Kinematics1d/Explore';
 import UnderstandKinematics from '@/components/chapters/Kinematics1d/Understand';
-import PracticeKinematics from '@/components/chapters/Kinematics1d/practice/PracticeTab';
 
 // Projectile Motion
 import ExploreProjectile from '@/components/chapters/projectile/Explore';
 import UnderstandProjectile from '@/components/chapters/projectile/Understand';
-import PracticeProjectile from '@/components/chapters/projectile/practice/PracticeTab';
 
 // Laws of Motion
 import ExploreLaws from '@/components/chapters/laws-of-motion/Explore';
 import UnderstandLaws from '@/components/chapters/laws-of-motion/Understand';
-import PracticeLaws from '@/components/chapters/laws-of-motion/practice/PracticeTab';
 
 // Work Energy Power
 import ExploreWorkEnergy from '@/components/chapters/work-energy/Explore';
 import UnderstandWorkEnergy from '@/components/chapters/work-energy/Understand';
-import PracticeWorkEnergy from '@/components/chapters/work-energy/practice/PracticeTab';
 
 // Circular Motion
 import ExploreCircular from '@/components/chapters/circular-motion/Explore';
 import UnderstandCircular from '@/components/chapters/circular-motion/Understand';
-import PracticeCircular from '@/components/chapters/circular-motion/practice/PracticeTab';
 
 // SHM
 import ExploreSHM from '@/components/chapters/shm/Explore';
 import UnderstandSHM from '@/components/chapters/shm/Understanding';
-import PracticeSHM from '@/components/chapters/shm/practice/practiceTab';
 
 // Rotational Motion
 import ExploreRotational from '@/components/chapters/rotational-motion/Explore';
 import UnderstandRotational from '@/components/chapters/rotational-motion/Understand';
-import PracticeRotational from '@/components/chapters/rotational-motion/practice/PracticeTab';
 
 // Gravitation
 import ExploreGravitation from '@/components/chapters/gravitation/Explore';
 import UnderstandGravitation from '@/components/chapters/gravitation/Understand';
-import PracticeGravitation from '@/components/chapters/gravitation/practice/PracticeTab';
 
 // Thermodynamics
 import ExploreThermo from '@/components/chapters/thermodynamics/Explore';
 import UnderstandThermo from '@/components/chapters/thermodynamics/Understand';
-import PracticeThermo from '@/components/chapters/thermodynamics/practice/PracticeTab';
 
 // Waves
 import ExploreWaves from '@/components/chapters/waves/Explore';
 import UnderstandWaves from '@/components/chapters/waves/Understand';
-import PracticeWaves from '@/components/chapters/waves/practice/PracticeTab';
 
 const contentMap: Record<string, any> = {
   'units': {
     Explore: ExploreUnits,
-    Understand: UnderstandUnits,
-    Practice: PracticeUnits
+    Understand: UnderstandUnits
   },
   'kinematics-1d': {
     Explore: ExploreKinematics,
-    Understand: UnderstandKinematics,
-    Practice: PracticeKinematics
+    Understand: UnderstandKinematics
   },
   'projectile-motion': {
     Explore: ExploreProjectile,
-    Understand: UnderstandProjectile,
-    Practice: PracticeProjectile
+    Understand: UnderstandProjectile
   },
   'laws-of-motion': {
     Explore: ExploreLaws,
-    Understand: UnderstandLaws,
-    Practice: PracticeLaws
+    Understand: UnderstandLaws
   },
   'work-energy': {
     Explore: ExploreWorkEnergy,
-    Understand: UnderstandWorkEnergy,
-    Practice: PracticeWorkEnergy
+    Understand: UnderstandWorkEnergy
   },
   'circular-motion': {
     Explore: ExploreCircular,
-    Understand: UnderstandCircular,
-    Practice: PracticeCircular
+    Understand: UnderstandCircular
   },
   'shm': {
     Explore: ExploreSHM,
-    Understand: UnderstandSHM,
-    Practice: PracticeSHM
+    Understand: UnderstandSHM
   },
   'rotational-motion': {
     Explore: ExploreRotational,
-    Understand: UnderstandRotational,
-    Practice: PracticeRotational
+    Understand: UnderstandRotational
   },
   'gravitation': {
     Explore: ExploreGravitation,
-    Understand: UnderstandGravitation,
-    Practice: PracticeGravitation
+    Understand: UnderstandGravitation
   },
   'thermodynamics': {
     Explore: ExploreThermo,
-    Understand: UnderstandThermo,
-    Practice: PracticeThermo
+    Understand: UnderstandThermo
   },
   'waves': {
     Explore: ExploreWaves,
-    Understand: UnderstandWaves,
-    Practice: PracticeWaves
+    Understand: UnderstandWaves
   },
 };
 
@@ -192,11 +170,10 @@ export const ChapterPage = () => {
       <Navbar currentChapter={`${chapter.code}: ${chapter.title}`} />
 
       <main className="flex-1 pt-16 px-2 sm:px-4 pb-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4
-                        min-h-[calc(100vh-4rem)] overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[calc(100vh-4rem)]">
 
           {/* Simulation - left 2/3 */}
-          <div className="lg:col-span-2 border border-slate-800
+          <div className="lg:col-span-2 min-h-[400px] border border-slate-800
                           rounded-xl overflow-y-auto bg-slate-900/20
                           backdrop-blur-sm shadow-2xl">
             <Suspense fallback={<SimulationLoader />}>
@@ -205,7 +182,7 @@ export const ChapterPage = () => {
           </div>
 
           {/* TutorPanel - right 1/3 */}
-          <div className="lg:col-span-1 border border-slate-800
+          <div className="lg:col-span-1 min-h-[500px] border border-slate-800
                           rounded-xl overflow-hidden bg-slate-900/20
                           backdrop-blur-sm shadow-2xl flex flex-col">
             <TutorPanel
@@ -220,13 +197,6 @@ export const ChapterPage = () => {
               Understand={
                 content
                   ? <content.Understand />
-                  : <div className="p-4 text-slate-500 text-sm">
-                      Content coming soon.
-                    </div>
-              }
-              Practice={
-                content
-                  ? <content.Practice />
                   : <div className="p-4 text-slate-500 text-sm">
                       Content coming soon.
                     </div>

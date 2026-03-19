@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Question, Attempt } from '@/types/index';
+import { useAuthStore } from './authStore';
 
 interface PracticeState {
   selectedExam: string | null;
@@ -50,9 +51,11 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
 
   submitAnswer: (questionId: string, option: string, timeTaken: number, isCorrect: boolean) => {
     const { sessionAttempts, sessionScore } = get();
+    const { user } = useAuthStore.getState();
+
     const newAttempt: Attempt = {
       id: crypto.randomUUID(),
-      user_id: '',
+      user_id: user?.id || '',
       question_id: questionId,
       selected_option: option,
       is_correct: isCorrect,

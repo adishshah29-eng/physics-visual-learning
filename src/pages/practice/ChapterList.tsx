@@ -26,23 +26,63 @@ const allChapters: Record<string, string[]> = {
     'Semiconductors::semiconductors',
   ],
   chemistry: [
-    'Atomic Structure::atomic-structure', 'Chemical Bonding::chemical-bonding',
-    'States of Matter::states-of-matter', 'Thermochemistry::thermochemistry',
-    'Equilibrium::equilibrium', 'Redox Reactions::redox-reactions',
-    'Electrochemistry::electrochemistry', 'Organic Chemistry::organic-chemistry',
-    'Polymers::polymers', 'Biomolecules::biomolecules',
-    'Surface Chemistry::surface-chemistry', 'Coordination Compounds::coordination-compounds',
+    'Some Basic Concepts of Chemistry::some-basic-concepts-of-chemistry',
+    'Structure of Atom::structure-of-atom',
+    'Classification of Elements and Periodicity::classification-of-elements-and-periodicity',
+    'Chemical Bonding and Molecular Structure::chemical-bonding-and-molecular-structure',
+    'States of Matter::states-of-matter',
+    'Thermodynamics::thermodynamics-c',
+    'Chemical Equilibrium::chemical-equilibrium',
+    'Ionic Equilibrium::ionic-equilibrium',
+    'Redox Reactions::redox-reactions',
+    'p Block Elements (Group 13 & 14)::p-block-elements-group-13-14',
+    'General Organic Chemistry::general-organic-chemistry',
+    'Hydrocarbons::hydrocarbons',
+    'Solutions::solutions',
+    'Electrochemistry::electrochemistry',
+    'Chemical Kinetics::chemical-kinetics',
+    'p Block Elements (Group 15, 16, 17 & 18)::p-block-elements-group-15-16-17-18',
+    'd and f Block Elements::d-and-f-block-elements',
+    'Coordination Compounds::coordination-compounds',
+    'Haloalkanes and Haloarenes::haloalkanes-and-haloarenes',
+    'Alcohols Phenols and Ethers::alcohols-phenols-and-ethers',
+    'Aldehydes and Ketones::aldehydes-and-ketones',
+    'Carboxylic Acid Derivatives::carboxylic-acid-derivatives',
+    'Amines::amines',
+    'Biomolecules::biomolecules',
+    'Practical Chemistry::practical-chemistry'
   ],
   maths: [
-    'Sets & Relations::sets-relations', 'Trigonometry::trigonometry',
-    'Complex Numbers::complex-numbers', 'Quadratic Equations::quadratic-equations',
-    'Sequences & Series::sequences-series', 'Permutations & Combinations::permutations-combinations',
-    'Binomial Theorem::binomial-theorem', 'Straight Lines::straight-lines',
-    'Circles::circles', 'Conic Sections::conic-sections',
-    'Calculus Limits::calculus-limits', 'Derivatives::derivatives',
-    'Integrals::integrals', 'Differential Equations::differential-equations',
-    'Vectors & 3D::vectors-3d', 'Probability::probability',
-    'Matrices & Determinants::matrices-determinants', 'Statistics::statistics',
+    'Basic of Mathematics::basic-of-mathematics',
+    'Quadratic Equation::quadratic-equation',
+    'Complex Number::complex-number',
+    'Permutation Combination::permutation-combination',
+    'Sequences and Series::sequences-and-series',
+    'Binomial Theorem::binomial-theorem',
+    'Trigonometric Ratios & Identities::trigonometric-ratios-identities',
+    'Trigonometric Equations::trigonometric-equations',
+    'Straight Lines::straight-lines',
+    'Circle::circle',
+    'Parabola::parabola',
+    'Ellipse::ellipse',
+    'Hyperbola::hyperbola',
+    'Limits::limits',
+    'Statistics::statistics',
+    'Sets and Relations::sets-and-relations',
+    'Matrices::matrices',
+    'Determinants::determinants',
+    'Inverse Trigonometric Functions::inverse-trigonometric-functions',
+    'Functions::functions',
+    'Continuity and Differentiability::continuity-and-differentiability',
+    'Differentiation::differentiation',
+    'Application of Derivatives::application-of-derivatives',
+    'Indefinite Integration::indefinite-integration',
+    'Definite Integration::definite-integration',
+    'Area Under Curves::area-under-curves',
+    'Differential Equations::differential-equations',
+    'Vector Algebra::vector-algebra',
+    'Three Dimensional Geometry::three-dimensional-geometry',
+    'Probability::probability'
   ],
 };
 
@@ -65,28 +105,31 @@ const ChapterList: React.FC = () => {
         const chapterDefs = allChapters[subject || 'physics'] || [];
         const ks: KnowledgeState[] = user ? await getKnowledgeState(user.id) : [];
 
-        const results: ChapterInfo[] = [];
+        // Fetch all questions for this subject to count them locally
+        const { data: allQuestions } = await supabase
+          .from('questions')
+          .select('chapter')
+          .eq('exam', exam || '')
+          .eq('subject', subject || '');
 
-        for (const def of chapterDefs) {
-          const [name, slug] = def.split('::');
-
-          // Get question count
-          const { count } = await supabase
-            .from('questions')
-            .select('*', { count: 'exact', head: true })
-            .eq('exam', exam || '')
-            .eq('subject', subject || '')
-            .eq('chapter', slug);
-
-          const chapterKs = ks.find((k) => k.chapter === slug && k.subject === subject);
-
-          results.push({
-            name,
-            slug,
-            questionCount: count || 0,
-            mastery: chapterKs?.mastery || 0,
+        const questionCounts: Record<string, number> = {};
+        if (allQuestions) {
+          (allQuestions as { chapter: string }[]).forEach((q) => {
+            questionCounts[q.chapter] = (questionCounts[q.chapter] || 0) + 1;
           });
         }
+
+        const results: ChapterInfo[] = chapterDefs.map((def) => {
+          const [name, slug] = def.split('::');
+          const chapterKs = ks.find((k) => k.chapter === slug && k.subject === subject);
+
+          return {
+            name,
+            slug,
+            questionCount: questionCounts[slug] || 0,
+            mastery: chapterKs?.mastery || 0,
+          };
+        });
 
         setChapters(results);
       } catch (err) {

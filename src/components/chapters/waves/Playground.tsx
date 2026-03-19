@@ -191,7 +191,7 @@ export default function WavesPlayground() {
 
           {/* ── Doppler (subtask 1) ── */}
           {mode === 'doppler' && (() => {
-            const circles: JSX.Element[] = [];
+            const circles: React.JSX.Element[] = [];
             for (let i = 0; i < 8; i++) {
               const emitT = t - i * (1 / freq1);
               if (emitT < 0) continue;
@@ -217,7 +217,7 @@ export default function WavesPlayground() {
 
           {/* ── Harmonics (subtask 2) ── */}
           {mode === 'harmonics' && (() => {
-            const elems: JSX.Element[] = [];
+            const elems: React.JSX.Element[] = [];
             const x0 = 30;
             for (let n = 1; n <= harmN; n++) {
               const color = HARM_COLORS[(n - 1) % HARM_COLORS.length];
@@ -303,7 +303,7 @@ export default function WavesPlayground() {
             <NumberInput label="Frequency (f₂)" unit="Hz" value={freq2} onChange={v => { setFreq2(v); handleReset(); }} />
             <NumberInput label="Wavelength (λ₂)" unit="px" value={waveLen2} onChange={v => { setWaveLen2(v); handleReset(); }} />
             {mode === 'superposition' && (
-              <NumberInput label="Phase φ₂" unit="°" value={phase2} onChange={v => { setPhase2(v); handleReset(); }} />
+              <NumberInput label="Phase φ₂" unit="°" value={phase2} allowAny={true} onChange={v => { setPhase2(v); handleReset(); }} />
             )}
           </>}
           {mode === 'doppler' && (
@@ -313,7 +313,7 @@ export default function WavesPlayground() {
             <NumberInput label="Harmonics to show" unit="" value={harmN} onChange={v => { setHarmN(Math.min(Math.floor(v), 6)); handleReset(); }} />
           )}
           {(mode === 'single' || mode === 'superposition' || mode === 'standing') && (
-            <NumberInput label="Tracer X position" unit="px" value={tracerX} onChange={v => setTracerX(v)} />
+            <NumberInput label="Tracer X position" unit="px" value={tracerX} allowAny={true} onChange={v => setTracerX(v)} />
           )}
         </div>
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
@@ -357,13 +357,16 @@ export default function WavesPlayground() {
   );
 }
 
-function NumberInput({ label, unit, value, onChange }: { label: string; unit: string; value: number; onChange: (v: number) => void }) {
+function NumberInput({ label, unit, value, onChange, allowAny = false }: { label: string; unit: string; value: number; onChange: (v: number) => void; allowAny?: boolean }) {
   const [display, setDisplay] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value; setDisplay(raw);
-    const p = parseFloat(raw); if (!isNaN(p) && p > 0) onChange(p);
+    const p = parseFloat(raw); 
+    if (!isNaN(p)) {
+      if (allowAny || p > 0) onChange(p);
+    }
   };
-  const handleBlur = () => { const p = parseFloat(display); if (isNaN(p) || p <= 0) setDisplay(''); };
+  const handleBlur = () => { const p = parseFloat(display); if (isNaN(p) || (!allowAny && p <= 0)) setDisplay(''); };
   return (
     <div>
       <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">{label}</label>

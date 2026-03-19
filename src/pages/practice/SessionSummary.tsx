@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, XCircle, Clock, Target, BarChart3, ChevronDown, ChevronUp } from 'lucide-react';
 import { usePracticeStore } from '@/store/practiceStore';
 import Navbar from '@/components/Navbar';
+import MathRenderer from '@/components/ui/MathRenderer';
 
 const SessionSummary: React.FC = () => {
   const navigate = useNavigate();
@@ -140,9 +141,10 @@ const SessionSummary: React.FC = () => {
                 ) : (
                   <XCircle className="w-5 h-5 text-red-400 shrink-0" />
                 )}
-                <span className="text-sm text-slate-300 flex-1 truncate">
-                  Q{idx + 1}. {result.question.question_text}
-                </span>
+                <div className="text-sm text-slate-300 flex-1 truncate flex items-center gap-1">
+                  <span className="font-semibold">Q{idx + 1}.</span> 
+                  <MathRenderer content={result.question.question_text} className="truncate inline-block" />
+                </div>
                 <span className="text-xs text-slate-500 shrink-0">
                   {Math.round(result.timeTaken / 1000)}s
                 </span>
@@ -155,7 +157,9 @@ const SessionSummary: React.FC = () => {
 
               {expandedQuestion === result.question.id && (
                 <div className="px-4 pb-4 border-t border-slate-800 pt-3">
-                  <p className="text-sm text-slate-300 mb-3">{result.question.question_text}</p>
+                  <div className="text-sm text-slate-300 mb-3 leading-relaxed">
+                    <MathRenderer content={result.question.question_text} />
+                  </div>
                   <div className="space-y-2 mb-3">
                     {(['a', 'b', 'c', 'd'] as const).map((opt) => {
                       const optText = result.question[`option_${opt}` as keyof typeof result.question] as string;
@@ -170,16 +174,16 @@ const SessionSummary: React.FC = () => {
                             'border-slate-800 text-slate-400'
                           }`}
                         >
-                          <span className="font-semibold mr-2">{opt.toUpperCase()}.</span>
-                          {optText}
+                          <span className="font-semibold mr-2 shrink-0">{opt.toUpperCase()}.</span>
+                          <MathRenderer content={optText} className="flex-1" />
                         </div>
                       );
                     })}
                   </div>
                   {result.question.explanation && (
-                    <div className="text-xs text-slate-400 bg-slate-800/50 p-3 rounded-lg">
-                      <span className="font-semibold text-slate-300">Explanation: </span>
-                      {result.question.explanation}
+                    <div className="text-xs text-slate-400 bg-slate-800/50 p-3 rounded-lg leading-relaxed flex items-start gap-2">
+                      <span className="font-semibold text-slate-300 shrink-0">Explanation: </span>
+                      <MathRenderer content={result.question.explanation} className="flex-1" />
                     </div>
                   )}
                 </div>

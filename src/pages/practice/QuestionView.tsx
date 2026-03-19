@@ -6,6 +6,7 @@ import { usePracticeStore } from '@/store/practiceStore';
 import { supabase, type Question } from '@/lib/supabase';
 import { saveAttempt, updateKnowledgeState } from '@/lib/supabase-helpers';
 import Navbar from '@/components/Navbar';
+import MathRenderer from '@/components/ui/MathRenderer';
 
 const QuestionView: React.FC = () => {
   const { exam, subject, chapter } = useParams<{ exam: string; subject: string; chapter: string }>();
@@ -35,7 +36,7 @@ const QuestionView: React.FC = () => {
           .eq('subject', subject || '')
           .eq('chapter', chapter || '')
           .order('year', { ascending: false })
-          .limit(20);
+          .limit(25);
 
         if (data && data.length > 0) {
           startSession(data as Question[]);
@@ -237,21 +238,21 @@ const QuestionView: React.FC = () => {
               </span>
             )}
             <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
-              currentQuestion.difficulty === 'easy'
+              currentQuestion.difficulty === '1'
                 ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20'
-                : currentQuestion.difficulty === 'jee-main'
+                : currentQuestion.difficulty === '2'
                 ? 'text-sky-400 bg-sky-500/10 border border-sky-500/20'
                 : 'text-violet-400 bg-violet-500/10 border border-violet-500/20'
             }`}>
-              {currentQuestion.difficulty === 'easy' ? 'Easy' :
-               currentQuestion.difficulty === 'jee-main' ? 'JEE Main' : 'JEE Advanced'}
+              {currentQuestion.difficulty === '1' ? 'Level 1' :
+               currentQuestion.difficulty === '2' ? 'Level 2' : 'Level 3'}
             </span>
           </div>
 
           {/* Question Text */}
-          <p className="text-white text-base sm:text-lg leading-relaxed mb-8">
-            {currentQuestion.question_text}
-          </p>
+          <div className="text-white text-base sm:text-lg leading-relaxed mb-8">
+            <MathRenderer content={currentQuestion.question_text} />
+          </div>
 
           {/* Options */}
           <div className="space-y-3">
@@ -265,9 +266,9 @@ const QuestionView: React.FC = () => {
                 <span className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-sm font-semibold text-slate-300 shrink-0">
                   {String.fromCharCode(65 + idx)}
                 </span>
-                <span className="text-sm sm:text-base text-slate-200 pt-1 flex-1">
-                  {getOptionLabel(option)}
-                </span>
+                <div className="text-sm sm:text-base text-slate-200 pt-1 flex-1">
+                  <MathRenderer content={getOptionLabel(option)} />
+                </div>
                 {isAnswered && option === currentQuestion.correct_option && (
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-1" />
                 )}
@@ -283,7 +284,9 @@ const QuestionView: React.FC = () => {
         {isAnswered && currentQuestion.explanation && (
           <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 mb-6">
             <h4 className="text-sm font-semibold text-slate-300 mb-2">Explanation</h4>
-            <p className="text-sm text-slate-400 leading-relaxed">{currentQuestion.explanation}</p>
+            <div className="text-sm text-slate-400 leading-relaxed overflow-x-auto">
+                <MathRenderer content={currentQuestion.explanation} />
+            </div>
           </div>
         )}
 

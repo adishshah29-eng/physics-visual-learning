@@ -91,14 +91,22 @@ const Analytics: React.FC = () => {
           .single();
         setStreak(lb?.streak_days || 0);
 
-        // Difficulty breakdown (would need joins, approximate from attempts)
-        const easyCount = attempts.filter(() => Math.random() < 0.33).length; // placeholder
-        const mainCount = attempts.filter(() => Math.random() < 0.5).length;
-        const advCount = attempts.length - easyCount - mainCount;
+        // Actual Difficulty breakdown using joined questions data
+        let easyCount = 0;
+        let mainCount = 0;
+        let advCount = 0;
+
+        for (const a of attempts) {
+          const diff = (a as any).questions?.difficulty;
+          if (diff === 'easy' || diff === '1') easyCount++;
+          else if (diff === 'jee-main' || diff === '2') mainCount++;
+          else if (diff === 'jee-advanced' || diff === '3') advCount++;
+        }
+
         setDifficultyData([
-          { name: 'Easy', value: Math.max(easyCount, 1), accuracy: 85 },
-          { name: 'JEE Main', value: Math.max(mainCount, 1), accuracy: 65 },
-          { name: 'JEE Advanced', value: Math.max(advCount, 1), accuracy: 45 },
+          { name: 'Level 1 (Easy)', value: Math.max(easyCount, 0), accuracy: 85 },
+          { name: 'Level 2 (Mains)', value: Math.max(mainCount, 0), accuracy: 65 },
+          { name: 'Level 3 (Adv)', value: Math.max(advCount, 0), accuracy: 45 },
         ]);
       } catch (err) {
         console.error('Error loading analytics:', err);

@@ -86,24 +86,24 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
   // ─── CHAPTER PAGE NAVBAR ─────────────────────────────────────────────────────
   if (isChapterPage) {
     return (
-      <nav className="fixed top-0 left-0 right-0 h-16 z-50 glass-nav flex items-center justify-between px-6">
-        <div className="flex items-center gap-4 w-1/3">
+      <nav className="fixed top-0 left-0 right-0 h-16 z-50 glass-nav flex items-center justify-between px-4 sm:px-6">
+        <div className="flex items-center gap-2 sm:gap-4 w-1/4 sm:w-1/3">
           <Link to="/learn" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            <span className="text-sm font-medium">Back to Courses</span>
+            <ArrowLeft className="w-5 h-5 sm:mr-2" />
+            <span className="hidden sm:inline text-sm font-medium">Back to Courses</span>
           </Link>
         </div>
 
-        <div className="w-1/3 flex justify-center">
+        <div className="w-1/2 sm:w-1/3 flex justify-center">
           {currentChapter ? (
-            <h1 className="text-foreground font-medium text-lg tracking-wide">{currentChapter}</h1>
+            <h1 className="text-foreground font-medium text-sm sm:text-lg tracking-wide truncate px-2">{currentChapter}</h1>
           ) : (
             <span className="text-muted-foreground text-sm">Select a Module</span>
           )}
         </div>
 
-        <div className="w-1/3 flex justify-end">
-          <span className="text-xs font-medium text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-full border border-border">
+        <div className="w-1/4 sm:w-1/3 flex justify-end">
+          <span className="hidden sm:inline-block text-xs font-medium text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-full border border-border">
             Class 11–12 | JEE / CET
           </span>
         </div>
@@ -114,8 +114,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
   // ─── APP NAVBAR ──────────────────────────────────────────────────────────────
   if (isAppRoute && isAuthenticated) {
     return (
-      <nav className="fixed top-0 left-0 right-0 h-16 z-50 glass-nav">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-nav flex flex-col shadow-lg shadow-black/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between w-full">
           {/* Logo */}
           <Link to="/home" className="flex items-center gap-2 text-sky-400 shrink-0">
             <Atom className="w-5 h-5" />
@@ -206,8 +206,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
         </div>
 
         {/* Mobile Nav */}
-        <div className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-sm">
-          <div className="flex overflow-x-auto no-scrollbar px-4 gap-1">
+        <div className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-sm w-full">
+          <div className="flex overflow-x-auto no-scrollbar px-4 gap-1 py-1 items-center">
             {appNavLinks.map((link) => {
               const isActive = location.pathname === link.path || location.pathname.startsWith(link.path + '/');
               return (

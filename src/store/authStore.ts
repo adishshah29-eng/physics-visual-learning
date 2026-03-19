@@ -18,6 +18,8 @@ interface AuthState {
   setProfile: (profile: Profile | null) => void;
 }
 
+let authSubscription: any = null;
+
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   profile: null,
@@ -26,6 +28,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
+      if (authSubscription) {
+        authSubscription.unsubscribe();
+      }
+
       set({ isLoading: true });
 
       // Get current session
@@ -49,7 +55,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
 
       // Listen for auth changes
-      supabase.auth.onAuthStateChange(async (event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           const profile = await getProfile(session.user.id);
           set({
@@ -67,6 +73,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           });
         }
       });
+      authSubscription = subscription;
     } catch (error) {
       console.error('Auth initialization error:', error);
       set({ isLoading: false });

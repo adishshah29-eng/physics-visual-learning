@@ -5,13 +5,12 @@ import { AIChatTab } from "@/components/common/AIChatTab";
 interface Props {
   Explore: ReactNode;
   Understand: ReactNode;
-  Practice: ReactNode;
   chapterTitle: string;
 }
 
-type Tab = "explore" | "understand" | "practice" | "ai";
+type Tab = "explore" | "understand" | "ai";
 
-const TutorPanel: React.FC<Props> = ({ Explore, Understand, Practice, chapterTitle }) => {
+const TutorPanel: React.FC<Props> = ({ Explore, Understand, chapterTitle }) => {
   const [activeTab, setActiveTab] = useState<Tab>("explore");
 
   return (
@@ -29,12 +28,6 @@ const TutorPanel: React.FC<Props> = ({ Explore, Understand, Practice, chapterTit
           onClick={() => setActiveTab("understand")}
           icon={<BookOpen className="w-4 h-4" />}
           label="Understand"
-        />
-        <TabButton
-          active={activeTab === "practice"}
-          onClick={() => setActiveTab("practice")}
-          icon={<Target className="w-4 h-4" />}
-          label="Practice"
         />
         <TabButton
           active={activeTab === "ai"}
@@ -56,7 +49,6 @@ const TutorPanel: React.FC<Props> = ({ Explore, Understand, Practice, chapterTit
       <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
         {activeTab === "explore" && Explore}
         {activeTab === "understand" && Understand}
-        {activeTab === "practice" && Practice}
         {activeTab === "ai" && <AIChatTab chapterTitle={chapterTitle} />}
       </div>
     </div>
