@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link, useSearchParams } from 'react-router-dom';
 import { X, Clock, ChevronRight, ChevronLeft, Loader2, CheckCircle2, XCircle, Bookmark, LayoutGrid } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { usePracticeStore } from '@/store/practiceStore';
@@ -11,6 +11,13 @@ import MathRenderer from '@/components/ui/MathRenderer';
 const QuestionView: React.FC = () => {
   const { exam, subject, chapter } = useParams<{ exam: string; subject: string; chapter: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
+  const mode = searchParams.get('mode') || 'practice';
+  const limitParam = searchParams.get('limit');
+  const questionLimit = mode === 'session' && limitParam ? parseInt(limitParam, 10) : 1000;
+  const isSessionMode = mode === 'session';
+  
   const { user } = useAuthStore();
   const {
     sessionQuestions, currentQuestion, currentQuestionIndex, sessionAttempts,
@@ -36,11 +43,19 @@ const QuestionView: React.FC = () => {
           .eq('subject', subject || '')
           .eq('chapter', chapter || '')
           .order('year', { ascending: false })
-          .limit(25);
+          .limit(questionLimit);
 
         if (data && data.length > 0) {
           const questions = data as Question[];
           startSession(questions);
+
+          const startParam = searchParams.get('start');
+          if (startParam && mode === 'practice') {
+            const startIdx = parseInt(startParam, 10);
+            if (!isNaN(startIdx) && startIdx >= 0 && startIdx < questions.length) {
+              setQuestionIndex(startIdx);
+            }
+          }
 
           if (user) {
             // Load user's past attempts to pre-fill saved status
@@ -140,7 +155,11 @@ const QuestionView: React.FC = () => {
 
   const handleNext = () => {
     if (currentQuestionIndex >= sessionQuestions.length - 1) {
-      navigate('/practice/session-summary');
+      if (isSessionMode) {
+        navigate('/practice/session-summary');
+      } else {
+        navigate('/practice');
+      }
     } else {
       nextQuestion();
     }
@@ -153,7 +172,11 @@ const QuestionView: React.FC = () => {
   };
 
   const handleExit = () => {
-    navigate('/practice/session-summary');
+    if (isSessionMode) {
+      navigate('/practice/session-summary');
+    } else {
+      navigate('/practice');
+    }
   };
 
   const handleBookmark = () => {
@@ -225,7 +248,7 @@ const QuestionView: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+      <div className="min-h-screen bg-transparent text-slate-100 flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center pt-32">
           <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
@@ -236,12 +259,12 @@ const QuestionView: React.FC = () => {
 
   if (!currentQuestion || sessionQuestions.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+      <div className="min-h-screen bg-transparent text-slate-100 flex flex-col">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center -mt-20 px-4">
           <div className="text-slate-400 text-center mb-6">
-            <p className="text-lg font-medium mb-2 text-slate-300">No questions available</p>
-            <p className="text-sm">Questions for this chapter haven&apos;t been added yet.</p>
+            <p className="text-xl font-display tracking-wide mb-2 text-slate-300">No questions available</p>
+            <p className="text-sm font-sans">Questions for this chapter haven&apos;t been added yet.</p>
           </div>
           <Link
             to={`/practice/${exam}/${subject}/chapters`}
@@ -264,7 +287,7 @@ const QuestionView: React.FC = () => {
         {/* Main Content Area */}
         <div className="flex-1 max-w-3xl w-full mx-auto flex flex-col">
           {/* Top Bar */}
-          <div className="flex bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 items-center justify-between mb-6 shadow-md">
+          <div className="flex glass-nav rounded-xl p-3 sm:p-4 items-center justify-between mb-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
             <div className="min-w-0 mr-2">
               <div className="text-sm font-semibold text-slate-300 truncate">{chapterLabel}</div>
               <div className="text-xs text-sky-400 font-medium tracking-wide uppercase mt-1">
@@ -272,10 +295,12 @@ const QuestionView: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <div className="flex items-center gap-2 text-slate-300 font-mono bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700/50">
-                <Clock className="w-4 h-4 text-sky-400" />
-                {formatTime(elapsedTime)}
-              </div>
+              {isSessionMode && (
+                <div className="flex items-center gap-2 text-slate-300 font-mono bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700/50">
+                  <Clock className="w-4 h-4 text-sky-400" />
+                  {formatTime(elapsedTime)}
+                </div>
+              )}
               <button onClick={handleBookmark} className="hidden sm:flex text-slate-400 hover:text-amber-400 transition-colors p-2 hover:bg-slate-800 rounded-lg">
                 <Bookmark className={`w-5 h-5 ${bookmarked ? 'fill-amber-400 text-amber-400' : ''}`} />
               </button>
@@ -297,7 +322,7 @@ const QuestionView: React.FC = () => {
           </div>
 
           {/* Question Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 sm:p-8 mb-6 shadow-xl shadow-black/20">
+          <div className="glass-panel rounded-xl p-6 sm:p-8 mb-6 shadow-2xl relative overflow-hidden">
             {/* Badges */}
             <div className="flex items-center gap-2 mb-6">
               {currentQuestion.year && (
@@ -355,8 +380,8 @@ const QuestionView: React.FC = () => {
 
           {/* Explanation */}
           {isAnswered && currentQuestion.explanation && (
-            <div className="bg-sky-950/20 border border-sky-900/50 rounded-xl p-6 mb-8 mt-2 transition-all">
-              <h4 className="text-sm font-bold text-sky-400 flex items-center gap-2 mb-3 tracking-wide uppercase">
+            <div className="glass-panel bg-sky-950/20 border-sky-900/50 rounded-xl p-6 mb-8 mt-2 transition-all shadow-[0_0_20px_rgba(56,189,248,0.05)]">
+              <h4 className="text-sm font-bold text-sky-400 flex items-center gap-2 mb-3 tracking-wide uppercase font-sans">
                 Explanation
               </h4>
               <div className="text-sm text-slate-300 leading-relaxed overflow-x-auto">
@@ -383,20 +408,34 @@ const QuestionView: React.FC = () => {
               Previous
             </button>
               
-            <button
-              onClick={handleNext}
-              className="bg-sky-500 hover:bg-sky-400 text-white shadow-lg shadow-sky-500/20 font-semibold rounded-xl px-6 py-3 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
-            >
-              {currentQuestionIndex >= sessionQuestions.length - 1 ? 'View Summary' : 'Next Question'}
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            {currentQuestionIndex >= sessionQuestions.length - 1 ? (
+              <button
+                onClick={() => {
+                  if (isSessionMode) navigate('/practice/session-summary');
+                  else navigate(`/practice/${exam}/${subject}/chapters`);
+                }}
+                className="bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 font-semibold rounded-xl px-6 py-3 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
+              >
+                {isSessionMode ? 'View Summary' : 'Finish Practice'}
+                <CheckCircle2 className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                className="bg-sky-500 hover:bg-sky-400 text-white shadow-lg shadow-sky-500/20 font-semibold rounded-xl px-6 py-3 text-sm transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
+              >
+                Next Question
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Side Palette */}
+        {/* Side Palette */
+        isSessionMode && (
         <div className="w-full lg:w-72 xl:w-80 shrink-0 mt-8 lg:mt-0">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 lg:sticky top-28 shadow-xl">
-            <div className="flex items-center gap-2 mb-5 text-slate-200 font-semibold border-b border-slate-800 pb-4">
+          <div className="glass-panel rounded-xl p-5 lg:sticky top-28 shadow-2xl">
+            <div className="flex items-center gap-2 mb-5 text-slate-200 font-semibold border-b border-slate-800/50 pb-4">
               <LayoutGrid className="w-5 h-5 text-sky-400" />
               <h3>Question Palette</h3>
             </div>
@@ -415,7 +454,7 @@ const QuestionView: React.FC = () => {
             </div>
              
             {/* Legend */}
-            <div className="flex flex-col gap-3 text-xs text-slate-400 border-t border-slate-800 bg-slate-950/50 -mx-5 -mb-5 p-5 rounded-b-xl">
+            <div className="flex flex-col gap-3 text-xs text-slate-400 border-t border-slate-800/50 bg-slate-900/40 -mx-5 -mb-5 p-5 rounded-b-xl backdrop-blur-sm">
               <div className="flex items-center gap-3 font-medium">
                 <div className="w-4 h-4 rounded border border-slate-700 bg-slate-800/50"></div>
                 <span>Unattempted</span>
@@ -431,6 +470,7 @@ const QuestionView: React.FC = () => {
             </div>
           </div>
         </div>
+        )}
 
       </div>
     </div>

@@ -105,7 +105,7 @@ export default function WorkEnergyPlayground() {
   const frictionArrowLen = Math.min(fk * 0.8, 70);
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100
+    <div className="flex flex-col bg-transparent text-slate-100
                     p-4 space-y-5 overflow-y-auto min-h-full">
 
       {/* Title */}
@@ -119,7 +119,7 @@ export default function WorkEnergyPlayground() {
       </div>
 
       {/* SVG Canvas */}
-      <div className="bg-slate-900 border border-slate-800
+      <div className="glass-panel
                       rounded-xl overflow-hidden relative">
         <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} className="w-full h-auto">
           <defs>
@@ -270,7 +270,7 @@ export default function WorkEnergyPlayground() {
       </div>
 
       {/* Energy Bars */}
-      <div className="bg-slate-900 border border-slate-800
+      <div className="glass-panel
                       rounded-xl p-4 space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider
                        text-slate-400">
@@ -292,7 +292,7 @@ export default function WorkEnergyPlayground() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         {/* Inputs */}
-        <div className="bg-slate-900 border border-slate-800
+        <div className="glass-panel
                         rounded-xl p-4 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider
                          text-slate-400">
@@ -309,7 +309,7 @@ export default function WorkEnergyPlayground() {
         </div>
 
         {/* Results */}
-        <div className="bg-slate-900 border border-slate-800
+        <div className="glass-panel
                         rounded-xl p-4">
           <h3 className="text-xs font-bold uppercase tracking-wider
                          text-slate-400 mb-3">
@@ -337,7 +337,7 @@ export default function WorkEnergyPlayground() {
           </div>
 
           {/* Theorem check */}
-          <div className="mt-3 bg-slate-950/60 border border-slate-700/50
+          <div className="mt-3 bg-transparent/60 border border-slate-700/50
                           rounded-lg px-3 py-2 text-center">
             <span className="text-xs font-mono text-slate-400">
               ΣW = ΔKE → {netWork.toFixed(1)} J = {kineticEnergy.toFixed(1)} J{' '}

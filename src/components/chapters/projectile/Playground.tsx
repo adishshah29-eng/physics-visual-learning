@@ -110,12 +110,12 @@ const ProjectilePlayground = () => {
   }, [v0n, angn, h0n, gn, totalTime, valid]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 font-sans text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-950 min-h-screen">
+    <div className="max-w-6xl mx-auto p-6 font-sans text-slate-100 bg-transparent min-h-screen">
       
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-200 dark:border-slate-800 pb-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800/50 pb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Projectile Motion</h1>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">Projectile Motion</h1>
           <p className="text-sm text-slate-500">2D Kinematics & Vector Analysis</p>
         </div>
         <div className="flex gap-3">
@@ -139,10 +139,10 @@ const ProjectilePlayground = () => {
 
           <Panel title="Live Physics">
             <Stat label="Time (t)" val={t.toFixed(2)} unit="s" />
-            <div className="h-px bg-slate-200 dark:bg-slate-700 my-2" />
+            <div className="h-px glass-panel border-slate-700 dark:bg-slate-700 my-2" />
             <Stat label="Pos X" val={current.x.toFixed(2)} unit="m" />
             <Stat label="Pos Y" val={current.y.toFixed(2)} unit="m" />
-            <div className="h-px bg-slate-200 dark:bg-slate-700 my-2" />
+            <div className="h-px glass-panel border-slate-700 dark:bg-slate-700 my-2" />
             <Stat label="Vel X" val={current.vx.toFixed(2)} unit="m/s" />
             <Stat label="Vel Y" val={current.vy.toFixed(2)} unit="m/s" />
           </Panel>
@@ -152,7 +152,7 @@ const ProjectilePlayground = () => {
         <div className="lg:col-span-9 space-y-6">
           
           {/* 1. TRAJECTORY GRAPH (Y vs X) */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-1 relative">
+          <div className="glass-panel rounded-xl border border-slate-800/50 shadow-sm p-1 relative">
              <div className="absolute top-4 left-4 z-10 bg-white/90 dark:bg-slate-900/90 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-500 shadow-sm">
                 Trajectory Path
              </div>
@@ -171,7 +171,7 @@ const ProjectilePlayground = () => {
 
           {/* 2. SUB GRAPHS (Y-t and Vy-t) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <div className="h-64 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-1">
+             <div className="h-64 glass-panel rounded-xl border border-slate-800/50 shadow-sm p-1">
                 <ScientificGraph 
                     data={yData}
                     xKey="t"
@@ -183,7 +183,7 @@ const ProjectilePlayground = () => {
                     color="#8b5cf6"
                 />
              </div>
-             <div className="h-64 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-1">
+             <div className="h-64 glass-panel rounded-xl border border-slate-800/50 shadow-sm p-1">
                 <ScientificGraph 
                     data={vyData}
                     xKey="t"
@@ -207,7 +207,7 @@ export default ProjectilePlayground;
 /* ================= COMPONENT LIBRARY ================= */
 
 const Panel = ({ title, children }: any) => (
-  <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+  <div className="glass-panel p-5 rounded-xl border border-slate-800/50 shadow-sm">
     <h3 className="text-xs font-bold text-slate-400 uppercase mb-4 tracking-wider">{title}</h3>
     {children}
   </div>
@@ -215,10 +215,10 @@ const Panel = ({ title, children }: any) => (
 
 const Button = ({ label, onClick, color, disabled }: any) => {
   const colors: any = {
-    slate: "bg-slate-200 text-slate-700 hover:bg-slate-300",
+    slate: "glass-panel border-slate-700 text-slate-300 hover:border-sky-400 hover:text-white",
     emerald: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-500/20",
     amber: "bg-amber-500 text-white hover:bg-amber-600 shadow-amber-500/20",
-    indigo: "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-500/20",
+    indigo: "bg-sky-500 text-white hover:bg-sky-600 shadow-indigo-500/20",
   };
   return (
     <button onClick={onClick} disabled={disabled} className={`px-5 py-2 rounded-lg font-bold text-sm transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${colors[color]}`}>
@@ -230,9 +230,9 @@ const Button = ({ label, onClick, color, disabled }: any) => {
 const Input = ({ label, val, set, unit }: any) => (
   <div>
     <label className="block text-[10px] font-bold text-slate-500 mb-1">{label}</label>
-    <div className="flex bg-slate-100 dark:bg-slate-800 rounded border border-transparent focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
-      <input type="number" value={val} onChange={(e) => set(e.target.value)} className="w-full bg-transparent p-2 text-sm font-mono outline-none text-slate-800 dark:text-slate-100" />
-      <span className="bg-slate-200 dark:bg-slate-700 px-3 flex items-center text-xs text-slate-500 font-mono select-none">{unit}</span>
+    <div className="flex bg-slate-100 bg-slate-800 rounded border border-transparent focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+      <input type="number" value={val} onChange={(e) => set(e.target.value)} className="w-full bg-transparent p-2 text-sm font-mono outline-none text-slate-100" />
+      <span className="glass-panel border-slate-700 dark:bg-slate-700 px-3 flex items-center text-xs text-slate-500 font-mono select-none">{unit}</span>
     </div>
   </div>
 );
@@ -240,7 +240,7 @@ const Input = ({ label, val, set, unit }: any) => (
 const Stat = ({ label, val, unit }: any) => (
   <div className="flex justify-between items-baseline py-1">
     <span className="text-xs text-slate-500">{label}</span>
-    <span className="font-mono text-sm font-bold text-slate-700 dark:text-slate-200">
+    <span className="font-mono text-sm font-bold text-slate-300 dark:text-slate-200">
       {val} <span className="text-[10px] text-slate-400 font-normal">{unit}</span>
     </span>
   </div>

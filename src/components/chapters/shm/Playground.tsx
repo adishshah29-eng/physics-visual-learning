@@ -99,7 +99,7 @@ export default function SHMPlayground() {
   }).filter(Boolean).join(' ');
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100
+    <div className="flex flex-col bg-transparent text-slate-100
                     p-4 space-y-5 overflow-y-auto min-h-full">
 
       {/* Title */}
@@ -114,7 +114,7 @@ export default function SHMPlayground() {
       </div>
 
       {/* Spring-Mass Canvas */}
-      <div className="bg-slate-900 border border-slate-800
+      <div className="glass-panel
                       rounded-xl overflow-hidden relative">
         <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} className="w-full h-auto">
           <defs>
@@ -246,7 +246,7 @@ export default function SHMPlayground() {
       </div>
 
       {/* Energy bars */}
-      <div className="bg-slate-900 border border-slate-800
+      <div className="glass-panel
                       rounded-xl p-4 space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider
                        text-slate-400">
@@ -271,7 +271,7 @@ export default function SHMPlayground() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         {/* Inputs */}
-        <div className="bg-slate-900 border border-slate-800
+        <div className="glass-panel
                         rounded-xl p-4 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider
                          text-slate-400">Parameters</h3>
@@ -284,7 +284,7 @@ export default function SHMPlayground() {
         </div>
 
         {/* Results */}
-        <div className="bg-slate-900 border border-slate-800
+        <div className="glass-panel
                         rounded-xl p-4">
           <h3 className="text-xs font-bold uppercase tracking-wider
                          text-slate-400 mb-3">Live Results</h3>

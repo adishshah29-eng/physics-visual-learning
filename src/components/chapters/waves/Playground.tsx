@@ -116,7 +116,7 @@ export default function WavesPlayground() {
   const fBeat = Math.abs(freq1 - freq2);
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
+    <div className="flex flex-col bg-transparent text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
 
       <div>
         <h2 className="text-xl font-bold text-sky-400">Waves — Superposition & Beyond</h2>
@@ -147,7 +147,7 @@ export default function WavesPlayground() {
       </div>
 
       {/* Main SVG */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden relative">
+      <div className="glass-panel rounded-xl overflow-hidden relative">
         <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} className="w-full h-auto">
           <defs>
             <pattern id="wgrid2" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -275,7 +275,7 @@ export default function WavesPlayground() {
       </div>
 
       {/* Subtask 5: Intensity + energy bars */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+      <div className="glass-panel rounded-xl p-4 space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Wave Properties</h3>
         <EnergyBar label="Amplitude A₁" value={amp1} max={100} color="bg-sky-500" textColor="text-sky-400" unit="px" />
         {mode === 'superposition' && <>
@@ -292,7 +292,7 @@ export default function WavesPlayground() {
 
       {/* Parameters + Results */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-4">
+        <div className="glass-panel rounded-xl p-4 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Wave 1</h3>
           <NumberInput label="Amplitude (A₁)" unit="px" value={amp1} onChange={v => { setAmp1(Math.min(v, 80)); handleReset(); }} />
           <NumberInput label="Frequency (f₁)" unit="Hz" value={freq1} onChange={v => { setFreq1(v); handleReset(); }} />
@@ -316,7 +316,7 @@ export default function WavesPlayground() {
             <NumberInput label="Tracer X position" unit="px" value={tracerX} allowAny={true} onChange={v => setTracerX(v)} />
           )}
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+        <div className="glass-panel rounded-xl p-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Live Results</h3>
           <div className="grid grid-cols-2 gap-2">
             <Result label="v₁ = f₁λ₁" value={`${v1.toFixed(0)} px/s`} color="text-sky-400" />

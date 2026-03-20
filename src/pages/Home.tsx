@@ -100,13 +100,13 @@ const Home: React.FC = () => {
   const daysLeft = getExamDaysLeft();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
 
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
         {/* Greeting */}
         <div className="mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+          <h1 className="text-3xl sm:text-4xl font-display tracking-wide text-white mb-2">
             {getGreeting()}, {profile?.name?.split(' ')[0] || 'Student'} 👋
           </h1>
           {daysLeft && (
@@ -122,16 +122,16 @@ const Home: React.FC = () => {
           {/* Visual Learning */}
           <Link
             to="/learn"
-            className="group bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-sky-500/40 transition-all duration-300"
+            className="group glass-panel rounded-xl p-6 hover:border-sky-500/40 transition-all duration-300 relative overflow-hidden"
           >
             <div className="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition-colors">
-              <Atom className="w-6 h-6 text-sky-400" />
+              <Atom className="w-6 h-6 text-sky-400 group-hover:animate-pulse-sky" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">Visual Learning</h3>
+            <h3 className="text-lg font-display tracking-wide mb-2">Visual Learning</h3>
             <p className="text-slate-400 text-sm mb-4 leading-relaxed">
               Interactive physics simulations with AI tutor.
             </p>
-            <div className="text-xs text-slate-500 mb-4">7 chapters available</div>
+            <div className="text-xs text-slate-500 mb-4 font-mono">7 chapters available</div>
             <div className="flex items-center text-sky-400 text-sm font-medium group-hover:gap-2 transition-all">
               Explore Simulations <ChevronRight className="w-4 h-4 ml-1" />
             </div>
@@ -140,23 +140,23 @@ const Home: React.FC = () => {
           {/* MCQ Practice */}
           <Link
             to="/practice"
-            className="group bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-violet-500/40 transition-all duration-300"
+            className="group glass-panel rounded-xl p-6 hover:border-violet-500/40 transition-all duration-300 relative overflow-hidden"
           >
             <div className="w-12 h-12 bg-violet-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-violet-500/20 transition-colors">
               <BookOpen className="w-6 h-6 text-violet-400" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">MCQ Practice</h3>
+            <h3 className="text-lg font-display tracking-wide mb-2">MCQ Practice</h3>
             <p className="text-slate-400 text-sm mb-4 leading-relaxed">
               Year-wise PYQs for JEE Main, Advanced &amp; MHT CET.
             </p>
-            <div className="text-xs text-slate-500 mb-4">10,000+ questions</div>
+            <div className="text-xs text-slate-500 mb-4 font-mono">10,000+ questions</div>
             <div className="flex items-center text-violet-400 text-sm font-medium group-hover:gap-2 transition-all">
               Start Practicing <ChevronRight className="w-4 h-4 ml-1" />
             </div>
           </Link>
 
           {/* Mock Test */}
-          <div className="group bg-slate-900 border border-slate-800 rounded-xl p-6 relative overflow-hidden">
+          <div className="group glass-panel rounded-xl p-6 relative overflow-hidden">
             <div className="absolute top-4 right-4">
               <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
                 Coming Soon
@@ -165,11 +165,11 @@ const Home: React.FC = () => {
             <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-4">
               <Clock className="w-6 h-6 text-emerald-400" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">Mock Test</h3>
+            <h3 className="text-lg font-display tracking-wide mb-2">Mock Test</h3>
             <p className="text-slate-400 text-sm mb-4 leading-relaxed">
               Full length timed tests with detailed analysis.
             </p>
-            <div className="text-xs text-slate-500 mb-4">Full syllabus coverage</div>
+            <div className="text-xs text-slate-500 mb-4 font-mono">Full syllabus coverage</div>
             <div className="flex items-center text-emerald-400/50 text-sm font-medium">
               Coming Soon
             </div>
@@ -178,41 +178,41 @@ const Home: React.FC = () => {
 
         {/* Today's Summary */}
         <section className="mb-12">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 font-sans">
             Today&apos;s Summary
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+            <div className="glass-panel rounded-xl p-3 sm:p-4">
               <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
                 <Target className="w-3.5 h-3.5 shrink-0" /> <span className="truncate">Questions Solved</span>
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">
                 {isLoading ? '—' : stats.solvedToday}
               </div>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+            <div className="glass-panel rounded-xl p-3 sm:p-4">
               <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
                 <Flame className="w-3.5 h-3.5 text-orange-400 shrink-0" /> Streak
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">
                 {isLoading ? '—' : `${stats.streak} days`}
               </div>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+            <div className="glass-panel rounded-xl p-3 sm:p-4">
               <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
                 <BarChart3 className="w-3.5 h-3.5 shrink-0" /> Accuracy
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">
                 {isLoading ? '—' : `${stats.accuracy}%`}
               </div>
             </div>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+            <div className="glass-panel rounded-xl p-3 sm:p-4">
               <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-2">
                 <TrendingUp className="w-3.5 h-3.5 text-sky-400 shrink-0" /> <span className="truncate">Predicted Score</span>
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white">
                 {isLoading ? '—' : stats.predictedScore}
-                <span className="text-sm text-slate-500 font-normal ml-1">
+                <span className="text-sm text-slate-500 font-sans font-normal ml-1">
                   / {profile?.target_exam === 'mht-cet' ? 200 : 300}
                 </span>
               </div>
@@ -222,14 +222,14 @@ const Home: React.FC = () => {
 
         {/* Continue Where You Left Off */}
         <section>
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 font-sans">
             Continue Where You Left Off
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {lastChapter && (
               <Link
                 to={`/learn/${lastChapter}`}
-                className="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-sky-500/30 transition-all flex items-center justify-between"
+                className="glass-panel rounded-xl p-5 hover:border-sky-500/30 transition-all flex items-center justify-between"
               >
                 <div>
                   <div className="text-xs text-slate-500 mb-1">Last Chapter Studied</div>
@@ -243,7 +243,7 @@ const Home: React.FC = () => {
             {dueReviewCount > 0 && (
               <Link
                 to="/practice"
-                className="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-amber-500/30 transition-all flex items-center justify-between"
+                className="glass-panel rounded-xl p-5 hover:border-amber-500/30 transition-all flex items-center justify-between"
               >
                 <div>
                   <div className="text-xs text-slate-500 mb-1">Questions Due for Review</div>
@@ -255,7 +255,7 @@ const Home: React.FC = () => {
               </Link>
             )}
             {!lastChapter && dueReviewCount === 0 && (
-              <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-5 col-span-full text-center text-slate-500">
+              <div className="glass-panel rounded-xl opacity-80 p-5 col-span-full text-center text-slate-500">
                 Start a chapter or practice questions to see your progress here.
               </div>
             )}

@@ -163,7 +163,7 @@ export async function upsertProfile(
 ): Promise<Profile | null> {
   const { data, error } = await supabase
     .from('profiles')
-    .upsert(profile as ProfileInsert, { onConflict: 'id' })
+    .upsert(profile as any)
     .select()
     .single();
 
@@ -179,7 +179,7 @@ export async function upsertProfile(
 export async function saveAttempt(attempt: AttemptInsert): Promise<Attempt | null> {
   const { data, error } = await supabase
     .from('attempts')
-    .insert(attempt)
+    .insert(attempt as any)
     .select()
     .single();
 
@@ -235,6 +235,20 @@ export async function getAttemptsByUser(
   return (data as unknown as Attempt[]) || [];
 }
 
+export async function getAnalyticsAttempts(userId: string): Promise<any[]> {
+  const { data, error } = await supabase
+    .from('attempts')
+    .select('is_correct, time_taken_ms, created_at, questions!inner(difficulty)')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching analytics attempts:', error);
+    return [];
+  }
+  return data || [];
+}
+
 // ─── Knowledge State Helpers ───────────────────────────────────────────────────
 
 export async function getKnowledgeState(userId: string): Promise<KnowledgeState[]> {
@@ -263,11 +277,11 @@ export async function updateKnowledgeState(
     .eq('user_id', userId)
     .eq('subject', subject)
     .eq('chapter', chapter)
-    .single();
+    .maybeSingle();
 
-  const currentMastery = existing?.mastery ?? 0.3; // Default starting mastery
-  const totalAttempts = (existing?.total_attempts ?? 0) + 1;
-  const correctAttempts = (existing?.correct_attempts ?? 0) + (isCorrect ? 1 : 0);
+  const currentMastery = (existing as any)?.mastery ?? 0.3; // Default starting mastery
+  const totalAttempts = ((existing as any)?.total_attempts ?? 0) + 1;
+  const correctAttempts = ((existing as any)?.correct_attempts ?? 0) + (isCorrect ? 1 : 0);
   const newMastery = updateMastery(currentMastery, isCorrect);
 
   const { data, error } = await supabase
@@ -281,7 +295,7 @@ export async function updateKnowledgeState(
         total_attempts: totalAttempts,
         correct_attempts: correctAttempts,
         last_updated: new Date().toISOString(),
-      },
+      } as any,
       { onConflict: 'user_id,subject,chapter' }
     )
     .select()
@@ -335,10 +349,10 @@ export async function updateLeaderboardScore(userId: string): Promise<void> {
   let totalScore = 0;
   let correctCount = 0;
 
-  for (const attempt of attempts) {
+  for (const attempt of attempts as any[]) {
     if (attempt.is_correct) {
       correctCount++;
-      const diff = (attempt as unknown as { questions: { difficulty: string } }).questions?.difficulty;
+      const diff = (attempt as any).questions?.difficulty;
       if (diff === 'easy') totalScore += 1;
       else if (diff === 'jee-main') totalScore += 2;
       else if (diff === 'jee-advanced') totalScore += 3;
@@ -358,7 +372,7 @@ export async function updateLeaderboardScore(userId: string): Promise<void> {
   let streakDays = 0;
   if (recentAttempts && recentAttempts.length > 0) {
     const dates = [...new Set(
-      recentAttempts.map(a => new Date(a.created_at).toISOString().split('T')[0])
+      (recentAttempts as { created_at: string }[]).map(a => new Date(a.created_at).toISOString().split('T')[0])
     )].sort().reverse();
 
     const today = new Date().toISOString().split('T')[0];
@@ -386,9 +400,9 @@ export async function updateLeaderboardScore(userId: string): Promise<void> {
       total_score: totalScore,
       accuracy: Math.round(accuracy * 100) / 100,
       streak_days: streakDays,
-      questions_solved: attempts.length,
+      questions_solved: (attempts as any[]).length,
       updated_at: new Date().toISOString(),
-    },
+    } as any,
     { onConflict: 'user_id' }
   );
 }

@@ -129,12 +129,12 @@ const Playground = () => {
 
   /* ================= RENDER ================= */
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-slate-50 dark:bg-slate-950 min-h-screen text-slate-800 dark:text-slate-100 font-sans">
+    <div className="max-w-5xl mx-auto p-6 bg-transparent min-h-screen text-slate-100 font-sans">
       
       {/* 1. Header & Controls */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-800/50 pb-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Kinematics 1D Lab</h1>
+          <h1 className="text-3xl font-display tracking-wide text-white">Kinematics 1D Lab</h1>
           <p className="text-sm text-slate-500">Visualize motion with real-time graphs</p>
         </div>
 
@@ -142,7 +142,7 @@ const Playground = () => {
           {/* RESET BUTTON */}
           <button 
             onClick={handleReset}
-            className="px-4 py-2 rounded-lg font-semibold text-sm bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors"
+            className="px-4 py-2 rounded-lg font-semibold text-sm glass-panel border-slate-700 text-slate-300 hover:border-sky-400 hover:text-white transition-colors"
           >
             Reset
           </button>
@@ -154,7 +154,7 @@ const Playground = () => {
             className={`
               px-6 py-2 rounded-lg font-bold text-sm text-white shadow-lg transition-all transform active:scale-95
               ${!valid ? 'opacity-50 cursor-not-allowed bg-slate-400' : ''}
-              ${playing ? 'bg-amber-500 hover:bg-amber-600' : (t >= Tn ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700')}
+              ${playing ? 'bg-amber-500 hover:bg-amber-600' : (t >= Tn ? 'bg-sky-500 hover:bg-sky-600' : 'bg-emerald-600 hover:bg-emerald-700')}
             `}
           >
             {playing ? "Pause" : (t >= Tn ? "Restart" : "Start Simulation")}
@@ -165,7 +165,7 @@ const Playground = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         
         {/* 2. Inputs Column */}
-        <div className="lg:col-span-1 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm h-fit">
+        <div className="lg:col-span-1 glass-panel p-5 rounded-xl border border-slate-800/50 shadow-sm h-fit">
           <h3 className="text-xs font-bold uppercase text-slate-400 mb-4 tracking-wider">Parameters</h3>
           <div className="grid grid-cols-2 gap-4">
              <Input label="x₀ (Pos)" val={x0} set={setX0} unit="m" />
@@ -176,30 +176,30 @@ const Playground = () => {
         </div>
 
         {/* 3. Physics Equation Display (Visualizing the Math) */}
-        <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-900/50 p-5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 flex flex-col justify-center">
+        <div className="lg:col-span-2 glass-panel bg-slate-900/40 p-5 rounded-xl border border-dashed border-slate-700/50 flex flex-col justify-center">
              <h3 className="text-xs font-bold uppercase text-slate-400 mb-2 tracking-wider">Physics Engine</h3>
              
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Position Equation */}
-                <div className="bg-white dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-800">
+                <div className="glass-panel p-3 rounded border border-slate-800/50">
                     <div className="text-xs text-slate-500 mb-1 italic">Displacement Formula</div>
-                    <div className="font-mono text-sm md:text-base text-indigo-600 dark:text-indigo-400">
+                    <div className="font-mono text-sm md:text-base text-sky-400 font-mono">
                         x(t) = x₀ + ut + ½at²
                     </div>
                     {/* Live substitution */}
-                    <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-400">
+                    <div className="mt-2 pt-2 border-t border-slate-100 border-slate-800 text-xs font-mono text-slate-400">
                         x({t.toFixed(2)}) = {x0n} + ({un}·{t.toFixed(2)}) + 0.5({an}·{t.toFixed(2)}²)
                     </div>
                 </div>
 
                 {/* Velocity Equation */}
-                <div className="bg-white dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-800">
+                <div className="glass-panel p-3 rounded border border-slate-800/50">
                     <div className="text-xs text-slate-500 mb-1 italic">Velocity Formula</div>
-                    <div className="font-mono text-sm md:text-base text-amber-600 dark:text-amber-500">
+                    <div className="font-mono text-sm md:text-base text-amber-400 font-mono">
                         v(t) = u + at
                     </div>
                     {/* Live substitution */}
-                    <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-400">
+                    <div className="mt-2 pt-2 border-t border-slate-100 border-slate-800 text-xs font-mono text-slate-400">
                         v({t.toFixed(2)}) = {un} + ({an}·{t.toFixed(2)})
                     </div>
                 </div>
@@ -210,14 +210,14 @@ const Playground = () => {
       {/* 4. Motion Visualization Track */}
       <div className="mb-10">
         <div className="flex justify-between items-end mb-2">
-            <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase">Motion Visualizer</h3>
+            <h3 className="text-sm font-bold text-slate-600 text-slate-400 uppercase">Motion Visualizer</h3>
             <div className="font-mono text-sm">
-                Current Pos: <span className="font-bold text-indigo-600">{currentX.toFixed(2)} m</span>
+                Current Pos: <span className="font-bold text-sky-400 font-mono">{currentX.toFixed(2)} m</span>
             </div>
         </div>
         
         {/* The Track Container */}
-        <div className="relative h-24 bg-slate-200 dark:bg-slate-800 rounded-lg border-x-4 border-slate-300 dark:border-slate-700 overflow-hidden">
+        <div className="relative h-24 glass-panel border-slate-700 bg-slate-800 rounded-lg border-x-4 border-slate-700/50 overflow-hidden">
             {/* Ruler Ticks */}
             <Ruler min={xMeta.min} max={xMeta.max} />
             
@@ -231,7 +231,7 @@ const Playground = () => {
 
             {/* The Ball */}
             <div 
-                className="absolute top-1/2 w-8 h-8 -ml-4 -mt-4 bg-indigo-600 rounded-full shadow-lg z-10 flex items-center justify-center text-white text-[10px] font-bold ring-2 ring-white dark:ring-slate-900"
+                className="absolute top-1/2 w-8 h-8 -ml-4 -mt-4 bg-sky-500 rounded-full shadow-lg z-10 flex items-center justify-center text-white text-[10px] font-bold ring-2 ring-white dark:ring-slate-900"
                 style={{ 
                     left: `${normalize(currentX, xMeta.min, xMeta.max) * 100}%` 
                 }}
@@ -289,7 +289,7 @@ const normalize = (val: number, min: number, max: number) => (val - min) / (max 
 const Input = ({ label, val, set, unit }: any) => (
     <div>
         <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">{label}</label>
-        <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded border border-transparent focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+        <div className="flex items-center bg-slate-100 bg-slate-800 rounded border border-transparent focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
             <input 
                 type="number" 
                 value={val} 
@@ -355,7 +355,7 @@ const AccurateGraph = ({ title, data, meta, duration, currentT, currentVal, unit
             </div>
 
             {/* Graph Box */}
-            <div className="relative border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-lg overflow-hidden h-64 shadow-sm">
+            <div className="relative border border-slate-800/50 glass-panel rounded-lg overflow-hidden h-64 shadow-sm">
                 <svg viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`} className="w-full h-full" preserveAspectRatio="none">
                     
                     {/* Horizontal Grid */}

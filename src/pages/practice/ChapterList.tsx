@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Search, ChevronRight, Loader2 } from 'lucide-react';
+import { Search, ChevronRight, Loader2, X, Clock, BookOpen } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { getKnowledgeState } from '@/lib/supabase-helpers';
 import { getMasteryLabel, getMasteryBgColor } from '@/services/ml/knowledgeTracing';
@@ -122,6 +122,10 @@ const ChapterList: React.FC = () => {
   const [sortBy, setSortBy] = useState<SortKey>('name');
   const [isLoading, setIsLoading] = useState(true);
 
+  // Modal State
+  const [selectedChapterForPractice, setSelectedChapterForPractice] = useState<ChapterInfo | null>(null);
+  const [sessionLimit, setSessionLimit] = useState(25);
+
   useEffect(() => {
     const loadChapters = async () => {
       setIsLoading(true);
@@ -129,19 +133,25 @@ const ChapterList: React.FC = () => {
         const chapterDefs = allChapters[subject || 'physics'] || [];
         const ks: KnowledgeState[] = user ? await getKnowledgeState(user.id) : [];
 
-        // Fetch all questions for this subject to count them locally
-        const { data: allQuestions } = await supabase
-          .from('questions')
-          .select('chapter')
-          .eq('exam', exam || '')
-          .eq('subject', subject || '');
-
+        // Fetch question counts locally in parallel without downloading any rows Data (head: true, count: 'exact')
         const questionCounts: Record<string, number> = {};
-        if (allQuestions) {
-          (allQuestions as { chapter: string }[]).forEach((q) => {
-            questionCounts[q.chapter] = (questionCounts[q.chapter] || 0) + 1;
-          });
-        }
+        
+        const countPromises = chapterDefs.map(async (def) => {
+          const [_, slug] = def.split('::');
+          const { count } = await supabase
+            .from('questions')
+            .select('*', { count: 'exact', head: true })
+            .eq('exam', exam || '')
+            .eq('subject', subject || '')
+            .eq('chapter', slug);
+            
+          return { slug, count: count || 0 };
+        });
+
+        const countResults = await Promise.all(countPromises);
+        countResults.forEach(r => {
+          questionCounts[r.slug] = r.count;
+        });
 
         const results: ChapterInfo[] = chapterDefs.map((def) => {
           const [name, slug] = def.split('::');
@@ -185,7 +195,7 @@ const ChapterList: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="min-h-screen bg-transparent text-slate-100">
         <Navbar />
         <div className="flex items-center justify-center pt-32">
           <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
@@ -195,15 +205,17 @@ const ChapterList: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
         <div className="mb-8">
-          <Link to={`/practice/${exam}/subject`} className="text-sm text-slate-500 hover:text-slate-400 mb-4 inline-block">
+          <Link to={`/practice/${exam}/subject`} className="text-sm text-slate-500 hover:text-slate-400 mb-4 inline-block font-sans">
             ← Back to Subjects
           </Link>
-          <h1 className="text-3xl font-bold mb-1">{subjectLabel} Chapters</h1>
-          <p className="text-slate-400 text-sm">{examLabel} • {filteredChapters.length} chapters</p>
+          <h1 className="text-3xl font-display tracking-wide mb-1 flex items-center gap-3">
+            {subjectLabel} Chapters
+          </h1>
+          <p className="text-slate-400 text-sm font-sans">{examLabel} • <span className="font-mono text-sky-400">{filteredChapters.length}</span> chapters</p>
         </div>
 
         {/* Search & Sort */}
@@ -215,7 +227,7 @@ const ChapterList: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search chapters..."
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 outline-none text-sm"
+              className="w-full glass-panel border border-slate-700/50 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-slate-500 focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/50 outline-none text-sm transition-all"
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -225,8 +237,8 @@ const ChapterList: React.FC = () => {
                 onClick={() => setSortBy(key)}
                 className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors capitalize ${
                   sortBy === key
-                    ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
-                    : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'
+                    ? 'bg-sky-500/20 text-sky-400 border border-sky-500/50 shadow-[0_0_15px_rgba(56,189,248,0.2)]'
+                    : 'glass-panel text-slate-400 hover:text-white'
                 }`}
               >
                 {key}
@@ -244,12 +256,12 @@ const ChapterList: React.FC = () => {
             return (
               <button
                 key={chapter.slug}
-                onClick={() => navigate(`/practice/${exam}/${subject}/${chapter.slug}`)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 text-left hover:border-slate-700 transition-all flex items-center gap-4 group"
+                onClick={() => navigate(`/practice/${exam}/${subject}/${chapter.slug}/list`)}
+                className="w-full glass-panel hover:bg-slate-800/20 rounded-xl p-4 text-left hover:border-sky-500/30 transition-all flex items-center gap-4 group"
               >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-medium text-white truncate">{chapter.name}</h3>
+                 <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                    <h3 className="text-lg font-display tracking-wide text-white truncate">{chapter.name}</h3>
                     <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
                       label === 'Beginner' ? 'bg-red-500/10 text-red-400' :
                       label === 'Developing' ? 'bg-orange-500/10 text-orange-400' :
@@ -259,7 +271,7 @@ const ChapterList: React.FC = () => {
                       {label}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-slate-500">
+                  <div className="flex items-center gap-4 text-xs text-slate-500 font-mono">
                     <span>{chapter.questionCount} questions</span>
                     <span>{Math.round(chapter.mastery * 100)}% mastery</span>
                   </div>

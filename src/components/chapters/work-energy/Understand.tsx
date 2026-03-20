@@ -2,33 +2,33 @@ const WorkEnergyUnderstand = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-medium text-foreground">
+        <h2 className="text-xl font-display tracking-wide text-white">
           Key Concepts & Formulas
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           These are the core equations you need for JEE.
         </p>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">Work (W)</h3>
-        <p className="text-sm text-muted-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">Work (W)</h3>
+        <p className="text-sm text-slate-400">
           Work is done when force has a component along displacement.
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded">
           W = F · d · cosθ
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-400">
           θ is angle between force and displacement. 
           If perpendicular, W = 0.
         </p>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Kinetic Energy (KE)
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Energy of motion. Depends on mass and velocity.
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded">
@@ -36,11 +36,11 @@ const WorkEnergyUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Potential Energy (PE)
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Energy stored due to position. Gravitational PE:
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded">
@@ -48,11 +48,11 @@ const WorkEnergyUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Work-Energy Theorem
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Net work done = change in kinetic energy.
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded">
@@ -60,21 +60,21 @@ const WorkEnergyUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">Power (P)</h3>
-        <p className="text-sm text-muted-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">Power (P)</h3>
+        <p className="text-sm text-slate-400">
           Rate of doing work.
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded">
           P = W/t = F·v
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-400">
           Unit: Watt (W) = Joule/second
         </p>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Conservation of Energy
         </h3>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded">
@@ -85,11 +85,11 @@ const WorkEnergyUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 space-y-2">
+      <div className="bg-primary/10 border border-sky-400/30 rounded-lg p-4 space-y-2">
         <h3 className="text-sm font-semibold text-primary">
           ⚠️ JEE Common Traps
         </h3>
-        <ul className="text-xs text-muted-foreground space-y-2 list-disc pl-4">
+        <ul className="text-xs text-slate-400 space-y-2 list-disc pl-4">
           <li>
             Work done by friction is always negative — 
             never forget the sign

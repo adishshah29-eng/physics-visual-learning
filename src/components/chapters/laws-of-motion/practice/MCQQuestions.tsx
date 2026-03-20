@@ -26,7 +26,7 @@ const MCQQuestions: React.FC<Props> = ({ questions }) => {
 
   if (!current) {
     return (
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-sm text-slate-400">
         No questions available.
       </div>
     );
@@ -47,8 +47,8 @@ const MCQQuestions: React.FC<Props> = ({ questions }) => {
             }}
             className={`px-4 py-1.5 rounded-full text-sm border transition ${
               difficulty === tab.value
-                ? "bg-primary/20 text-primary border-primary"
-                : "border-border text-muted-foreground hover:bg-secondary/40"
+                ? "bg-primary/20 text-primary border-sky-400"
+                : "border-border text-slate-400 hover:bg-secondary/40"
             }`}
           >
             {tab.label}
@@ -57,7 +57,7 @@ const MCQQuestions: React.FC<Props> = ({ questions }) => {
       </div>
 
       {/* Question */}
-      <div className="text-base font-medium text-foreground">
+      <div className="text-base font-display tracking-wide text-white">
         {current.question}
       </div>
 
@@ -78,7 +78,7 @@ const MCQQuestions: React.FC<Props> = ({ questions }) => {
                     ? "border-green-500 bg-green-500/10 text-green-400"
                     : isWrong
                     ? "border-red-500 bg-red-500/10 text-red-400"
-                    : "border-border hover:bg-secondary/30"
+                    : "border-border hover:glass-panel"
                 }`}
             >
               {opt}

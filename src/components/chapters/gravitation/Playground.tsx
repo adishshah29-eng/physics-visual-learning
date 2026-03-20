@@ -181,7 +181,7 @@ export default function GravitationPlayground() {
     : 0;
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
+    <div className="flex flex-col bg-transparent text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
 
       <div>
         <h2 className="text-xl font-bold text-sky-400">Gravitation — Orbital Mechanics</h2>
@@ -219,7 +219,7 @@ export default function GravitationPlayground() {
       </div>
 
       {/* Main SVG Canvas */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden relative">
+      <div className="glass-panel rounded-xl overflow-hidden relative">
         <svg viewBox="0 0 700 350" className="w-full h-auto">
           <defs>
             <radialGradient id="gStar" cx="40%" cy="35%" r="60%">
@@ -311,7 +311,7 @@ export default function GravitationPlayground() {
       )}
 
       {/* Energy bars */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+      <div className="glass-panel rounded-xl p-4 space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Energy (specific — per unit planet mass)</h3>
         <EnergyBar label="Kinetic Energy ½v²" value={Math.abs(KE)} max={PE0 || 1} color="bg-emerald-500" textColor="text-emerald-400"/>
         <EnergyBar label="|Potential Energy| GM/r" value={Math.abs(PE)} max={PE0 || 1} color="bg-amber-500" textColor="text-amber-400"/>
@@ -324,7 +324,7 @@ export default function GravitationPlayground() {
 
       {/* Parameters + Results grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-4">
+        <div className="glass-panel rounded-xl p-4 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Parameters</h3>
           <NumberInput label="Star Mass" unit="M☉" value={starMass} onChange={val => setStarMass(val)}/>
           <NumberInput label="Orbital Distance" unit="AU" value={rOrbit} onChange={val => setROrbit(Math.min(val, 3.0))}/>
@@ -335,7 +335,7 @@ export default function GravitationPlayground() {
         </div>
 
         {/* Subtasks 3, 4, 5 results */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+        <div className="glass-panel rounded-xl p-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Live Results</h3>
           <div className="grid grid-cols-2 gap-2">
             <Result label="Speed v" value={v.toFixed(1)} color="text-emerald-400"/>

@@ -2,20 +2,20 @@ const RotationalUnderstand = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-medium text-foreground">
+        <h2 className="text-xl font-display tracking-wide text-white">
           Key Concepts & Formulas
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Rotational motion has a direct parallel to every linear concept.
           Memorize the analogies — JEE loves mixing them.
         </p>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Torque & Newton's Second Law (Rotation)
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Torque is the rotational analogue of force:
         </p>
         <div className="font-mono text-sm text-primary
@@ -28,8 +28,8 @@ const RotationalUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Moment of Inertia (Common Shapes)
         </h3>
         <div className="space-y-1">
@@ -56,8 +56,8 @@ const RotationalUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Parallel & Perpendicular Axis Theorems
         </h3>
         <div className="font-mono text-sm text-primary
@@ -70,8 +70,8 @@ const RotationalUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Angular Momentum & Conservation
         </h3>
         <div className="font-mono text-sm text-primary
@@ -82,14 +82,14 @@ const RotationalUnderstand = () => {
                         bg-black/20 p-2 rounded">
           τ_ext = 0 ⟹ L = constant
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-400">
           When no external torque acts, angular momentum is conserved.
           This is why a spinning skater speeds up when pulling arms in.
         </p>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Rotational Kinetic Energy & Rolling
         </h3>
         <div className="space-y-1">
@@ -108,26 +108,26 @@ const RotationalUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Rolling Down an Incline
         </h3>
         <div className="font-mono text-sm text-primary
                         bg-black/20 p-2 rounded">
           a = g sinθ / (1 + I/(mR²))
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-400">
           Objects with smaller I/(mR²) accelerate faster. A solid sphere
           beats a hollow sphere; both beat a ring.
         </p>
       </div>
 
-      <div className="bg-primary/10 border border-primary/30
+      <div className="bg-primary/10 border border-sky-400/30
                       rounded-lg p-4 space-y-2">
         <h3 className="text-sm font-semibold text-primary">
           ⚠️ JEE Common Traps
         </h3>
-        <ul className="text-xs text-muted-foreground space-y-2
+        <ul className="text-xs text-slate-400 space-y-2
                        list-disc pl-4">
           <li>
             Moment of inertia depends on the <b>axis of rotation</b> —

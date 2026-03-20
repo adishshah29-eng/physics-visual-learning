@@ -2,19 +2,19 @@ const CircularMotionUnderstand = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-medium text-foreground">
+        <h2 className="text-xl font-display tracking-wide text-white">
           Key Concepts & Formulas
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           These are the formulas JEE expects you to apply instantly.
         </p>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Centripetal Acceleration
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Always directed toward the center of the circle.
         </p>
         <div className="font-mono text-sm text-primary
@@ -23,11 +23,11 @@ const CircularMotionUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Centripetal Force
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           The net inward force required to maintain circular motion.
         </p>
         <div className="font-mono text-sm text-primary
@@ -36,11 +36,11 @@ const CircularMotionUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Angular Velocity
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           How fast the angle is changing.
         </p>
         <div className="font-mono text-sm text-primary
@@ -49,11 +49,11 @@ const CircularMotionUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Period & Frequency
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Time for one full revolution and revolutions per second.
         </p>
         <div className="font-mono text-sm text-primary
@@ -62,11 +62,11 @@ const CircularMotionUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Banking of Roads
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Optimal banking angle for no friction needed:
         </p>
         <div className="font-mono text-sm text-primary
@@ -75,11 +75,11 @@ const CircularMotionUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-sm font-display tracking-wide text-white">
           Vertical Circle — Min Speed at Top
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           For a ball on a string to complete a vertical circle:
         </p>
         <div className="font-mono text-sm text-primary
@@ -88,12 +88,12 @@ const CircularMotionUnderstand = () => {
         </div>
       </div>
 
-      <div className="bg-primary/10 border border-primary/30
+      <div className="bg-primary/10 border border-sky-400/30
                       rounded-lg p-4 space-y-2">
         <h3 className="text-sm font-semibold text-primary">
           ⚠️ JEE Common Traps
         </h3>
-        <ul className="text-xs text-muted-foreground space-y-2
+        <ul className="text-xs text-slate-400 space-y-2
                        list-disc pl-4">
           <li>
             Centripetal force is <b>not</b> a separate force —

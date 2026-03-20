@@ -207,7 +207,7 @@ export default function LawsOfMotionPlayground() {
 
   /* ================= UI ================= */
   return (
-    <div className="flex flex-col h-full w-full bg-slate-950 text-slate-200 font-sans">
+    <div className="flex flex-col h-full w-full bg-transparent text-slate-200 font-sans">
       
       {/* HEADER */}
       <div className="shrink-0 p-3 border-b border-slate-800 flex flex-wrap justify-between items-center gap-3 bg-slate-900/80 backdrop-blur-sm">
@@ -255,7 +255,7 @@ export default function LawsOfMotionPlayground() {
           </div>
 
           {/* CALCULATIONS / FORMULAS */}
-          <div className="bg-slate-950/80 p-3 rounded-lg border border-slate-800 space-y-3">
+          <div className="bg-transparent/80 p-3 rounded-lg border border-slate-800 space-y-3">
               <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase">
                   <Calculator size={12} /> Physics Math
               </div>

@@ -21,13 +21,17 @@ import { ChapterPage } from '@/pages/ChapterPage';
 import ExamSelect from '@/pages/practice/ExamSelect';
 import SubjectSelect from '@/pages/practice/SubjectSelect';
 import ChapterList from '@/pages/practice/ChapterList';
+import ChapterQuestions from '@/pages/practice/ChapterQuestions';
 import QuestionView from '@/pages/practice/QuestionView';
 import SessionSummary from '@/pages/practice/SessionSummary';
 import Analytics from '@/pages/Analytics';
 import Leaderboard from '@/pages/Leaderboard';
+import Profile from '@/pages/Profile';
+import Settings from '@/pages/Settings';
 
 // Other
 import NotFound from '@/pages/NotFound';
+import Atmosphere from '@/components/Atmosphere';
 
 const queryClient = new QueryClient();
 
@@ -39,13 +43,15 @@ function AppContent() {
   }, [initialize]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public routes — redirect to /home if authenticated */}
-        <Route element={<PublicRoute />}>
-          <Route path="/" element={<Landing />} />
-          <Route path="/auth" element={<Auth />} />
-        </Route>
+    <>
+      <Atmosphere />
+      <BrowserRouter>
+        <Routes>
+          {/* Public routes — redirect to /home if authenticated */}
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<Landing />} />
+            <Route path="/auth" element={<Auth />} />
+          </Route>
 
         {/* Onboarding — auth required but no profile check */}
         <Route path="/onboarding" element={<Onboarding />} />
@@ -58,16 +64,20 @@ function AppContent() {
           <Route path="/practice" element={<ExamSelect />} />
           <Route path="/practice/:exam/subject" element={<SubjectSelect />} />
           <Route path="/practice/:exam/:subject/chapters" element={<ChapterList />} />
+          <Route path="/practice/:exam/:subject/:chapter/list" element={<ChapterQuestions />} />
           <Route path="/practice/:exam/:subject/:chapter" element={<QuestionView />} />
           <Route path="/practice/session-summary" element={<SessionSummary />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 

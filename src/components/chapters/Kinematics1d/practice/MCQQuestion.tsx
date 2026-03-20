@@ -12,7 +12,7 @@ const MCQQuestion: React.FC<Props> = ({ question }) => {
     <div className="space-y-6">
 
       {/* Question */}
-      <div className="text-sm text-foreground leading-relaxed">
+      <div className="text-sm text-white leading-relaxed">
         {question.question}
       </div>
 
@@ -60,11 +60,11 @@ const MCQQuestion: React.FC<Props> = ({ question }) => {
           </div>
 
           <div className="bg-black/40 border border-border rounded-lg p-4 space-y-2">
-            <div className="text-xs uppercase text-muted-foreground">
+            <div className="text-xs uppercase text-slate-400">
               Solution
             </div>
             {question.solution.map((step, i) => (
-              <div key={i} className="text-sm text-foreground">
+              <div key={i} className="text-sm text-white">
                 {step}
               </div>
             ))}

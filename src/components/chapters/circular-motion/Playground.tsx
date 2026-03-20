@@ -69,7 +69,7 @@ export default function CircularMotionPlayground() {
   const fcNy = (fcy / fcLen) * 55;
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100
+    <div className="flex flex-col bg-transparent text-slate-100
                     p-4 space-y-5 overflow-y-auto min-h-full">
 
       {/* Title */}
@@ -84,7 +84,7 @@ export default function CircularMotionPlayground() {
       <div className="flex flex-col lg:flex-row gap-4">
 
         {/* SVG */}
-        <div className="bg-slate-900 border border-slate-800
+        <div className="glass-panel
                         rounded-xl overflow-hidden flex-1 relative">
           <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} className="w-full h-auto">
             <defs>
@@ -222,7 +222,7 @@ export default function CircularMotionPlayground() {
       </div>
 
       {/* Parameters */}
-      <div className="bg-slate-900 border border-slate-800
+      <div className="glass-panel
                       rounded-xl p-4 space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider
                        text-slate-400">Parameters</h3>

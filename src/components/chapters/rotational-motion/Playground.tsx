@@ -171,7 +171,7 @@ export default function RotationalMotionPlayground() {
   const isSlipping = mode === 'slipping' && phaseRef.current === 'slip' && curV > 0.1;
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
+    <div className="flex flex-col bg-transparent text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
 
       {/* Title */}
       <div>
@@ -227,7 +227,7 @@ export default function RotationalMotionPlayground() {
       )}
 
       {/* Main Canvas */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden relative">
+      <div className="glass-panel rounded-xl overflow-hidden relative">
         <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} className="w-full h-auto">
           <defs>
             <pattern id="rg2" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -383,7 +383,7 @@ export default function RotationalMotionPlayground() {
       </div>
 
       {/* v-t graph */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+      <div className="glass-panel rounded-xl p-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Velocity vs Time</h3>
         <svg viewBox={`0 0 ${GRAPH_W} ${GRAPH_H}`} className="w-full h-auto">
           <line x1={10} y1={10} x2={10} y2={GRAPH_H - 10} stroke="#334155" strokeWidth="1"/>
@@ -402,7 +402,7 @@ export default function RotationalMotionPlayground() {
       </div>
 
       {/* Energy bars */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+      <div className="glass-panel rounded-xl p-4 space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Energy Distribution</h3>
         <EnergyBar label="Translational KE (½mv²)" value={keT} max={totE || 1} color="bg-emerald-500" textColor="text-emerald-400"/>
         <EnergyBar label="Rotational KE (½Iω²)" value={keR} max={totE || 1} color="bg-purple-500" textColor="text-purple-400"/>
@@ -415,7 +415,7 @@ export default function RotationalMotionPlayground() {
 
       {/* Parameters + Results */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-4">
+        <div className="glass-panel rounded-xl p-4 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Parameters</h3>
           <NumberInput label="Mass" unit="kg" value={mass} onChange={v => { setMass(v); handleReset(); }}/>
           <NumberInput label="Radius" unit="m" value={radius} onChange={v => { setRadius(v); handleReset(); }}/>
@@ -424,7 +424,7 @@ export default function RotationalMotionPlayground() {
             <NumberInput label="Friction Coeff (μ)" unit="" value={mu} onChange={v => { setMu(Math.min(v, 1)); handleReset(); }}/>
           )}
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+        <div className="glass-panel rounded-xl p-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Live Results</h3>
           <div className="grid grid-cols-2 gap-2">
             <Result label="Velocity (v)" value={`${curV.toFixed(3)} m/s`} color="text-emerald-400"/>

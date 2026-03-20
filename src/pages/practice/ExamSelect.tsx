@@ -79,7 +79,7 @@ const ExamSelect: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="min-h-screen bg-transparent text-slate-100">
         <Navbar />
         <div className="flex items-center justify-center pt-32">
           <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
@@ -89,11 +89,11 @@ const ExamSelect: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">MCQ Practice</h1>
-        <p className="text-slate-400 mb-10">Choose your exam to start practicing.</p>
+        <h1 className="text-3xl font-display tracking-wide mb-2">MCQ Practice</h1>
+        <p className="text-slate-400 mb-10 font-sans">Choose your exam to start practicing.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {exams.map((exam) => {
@@ -102,20 +102,20 @@ const ExamSelect: React.FC = () => {
               <button
                 key={exam.id}
                 onClick={() => navigate(`/practice/${exam.id}/subject`)}
-                className={`bg-slate-900 border border-slate-800 rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group`}
+                className={`glass-panel rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group relative overflow-hidden`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.icon}`}>
                   <span className="text-xl font-bold">{exam.label.charAt(0)}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-1">{exam.label}</h3>
+                <h3 className="text-xl font-display tracking-wide mb-1">{exam.label}</h3>
                 <p className="text-slate-400 text-xs mb-4">{exam.fullName}</p>
                 <p className="text-slate-500 text-xs mb-1">{exam.subjects}</p>
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-800">
-                  <span className="text-xs text-slate-500">
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-800/50">
+                  <span className="text-xs text-slate-500 font-mono">
                     {exam.questionCount > 0 ? `${exam.questionCount} questions` : 'Questions loading...'}
                   </span>
                   {exam.accuracy > 0 && (
-                    <span className={`text-xs font-medium ${colors.text}`}>
+                    <span className={`text-xs font-mono font-bold ${colors.text}`}>
                       {exam.accuracy}% accuracy
                     </span>
                   )}

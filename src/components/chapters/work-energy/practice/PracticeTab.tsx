@@ -28,7 +28,7 @@ const WorkEnergyPractice: React.FC = () => {
 
   if (!current) {
     return (
-      <div className="text-center text-sm text-muted-foreground p-4">
+      <div className="text-center text-sm text-slate-400 p-4">
         No questions available.
       </div>
     );
@@ -44,8 +44,8 @@ const WorkEnergyPractice: React.FC = () => {
             onClick={() => handleTabChange(tab.value)}
             className={`px-4 py-1.5 rounded-full text-sm border transition ${
               difficulty === tab.value
-                ? "bg-primary/20 text-primary border-primary"
-                : "border-border text-muted-foreground hover:bg-secondary/40"
+                ? "bg-primary/20 text-primary border-sky-400"
+                : "border-border text-slate-400 hover:bg-secondary/40"
             }`}
           >
             {tab.label}
@@ -54,7 +54,7 @@ const WorkEnergyPractice: React.FC = () => {
       </div>
 
       {/* Question */}
-      <div className="text-base font-medium text-foreground leading-relaxed">
+      <div className="text-base font-display tracking-wide text-white leading-relaxed">
         {current.question}
       </div>
 
@@ -74,7 +74,7 @@ const WorkEnergyPractice: React.FC = () => {
                     ? "border-green-500 bg-green-500/10 text-green-400"
                     : isWrong
                     ? "border-red-500 bg-red-500/10 text-red-400"
-                    : "border-border hover:bg-secondary/30"
+                    : "border-border hover:glass-panel"
                 }`}
             >
               {opt}
@@ -96,11 +96,11 @@ const WorkEnergyPractice: React.FC = () => {
               : "Wrong Answer ❌"}
           </div>
           <div className="bg-black/40 border border-border rounded-lg p-4 space-y-1">
-            <div className="text-xs uppercase text-muted-foreground mb-2">
+            <div className="text-xs uppercase text-slate-400 mb-2">
               Solution
             </div>
             {current.solution.map((step, i) => (
-              <div key={i} className="text-sm text-foreground">
+              <div key={i} className="text-sm text-white">
                 {step}
               </div>
             ))}

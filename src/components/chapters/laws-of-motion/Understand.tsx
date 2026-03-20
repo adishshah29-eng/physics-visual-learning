@@ -68,11 +68,11 @@ const ConceptCard = ({ index, title, desc, formula }: any) => (
     </div>
 
     <div className="space-y-1">
-      <h3 className="text-sm font-medium text-foreground leading-tight">
+      <h3 className="text-sm font-display tracking-wide text-white leading-tight">
         {title}
       </h3>
 
-      <p className="text-xs text-muted-foreground leading-snug">
+      <p className="text-xs text-slate-400 leading-snug">
         {desc}
       </p>
 

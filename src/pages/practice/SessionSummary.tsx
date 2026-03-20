@@ -55,7 +55,7 @@ const SessionSummary: React.FC = () => {
 
   if (totalQuestions === 0) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="min-h-screen bg-transparent text-slate-100">
         <Navbar />
         <div className="flex flex-col items-center justify-center pt-32">
           <p className="text-slate-400 mb-4">No session data available.</p>
@@ -72,10 +72,10 @@ const SessionSummary: React.FC = () => {
   const progress = (sessionScore / totalQuestions) * circumference;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold mb-8 text-center">Session Summary</h1>
+        <h1 className="text-3xl font-display tracking-wide mb-8 text-center">Session Summary</h1>
 
         {/* Score Circle */}
         <div className="flex flex-col items-center mb-10">
@@ -99,8 +99,8 @@ const SessionSummary: React.FC = () => {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-bold text-white">{sessionScore}/{totalQuestions}</span>
-              <span className="text-xs text-slate-400">{accuracy}%</span>
+              <span className="text-3xl font-mono font-bold text-white">{sessionScore}/{totalQuestions}</span>
+              <span className="text-xs font-mono text-slate-400">{accuracy}%</span>
             </div>
           </div>
           <span className={`text-lg font-semibold ${performanceColor}`}>{performanceLabel}</span>
@@ -108,28 +108,28 @@ const SessionSummary: React.FC = () => {
 
         {/* Stats Row */}
         <div className="grid grid-cols-3 gap-4 mb-10">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-center">
+          <div className="glass-panel rounded-xl p-3 sm:p-4 text-center">
             <Clock className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-            <div className="text-base sm:text-lg font-bold text-white">{formatTime(totalTime)}</div>
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider">Time Taken</div>
+            <div className="text-base sm:text-lg font-mono font-bold text-white">{formatTime(totalTime)}</div>
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-sans">Time Taken</div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-center">
+          <div className="glass-panel rounded-xl p-3 sm:p-4 text-center">
             <Target className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-            <div className="text-base sm:text-lg font-bold text-white">{accuracy}%</div>
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider">Accuracy</div>
+            <div className="text-base sm:text-lg font-mono font-bold text-white">{accuracy}%</div>
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-sans">Accuracy</div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-center">
+          <div className="glass-panel rounded-xl p-3 sm:p-4 text-center">
             <BarChart3 className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-            <div className="text-base sm:text-lg font-bold text-white">{avgTimePerQuestion}s</div>
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider">Avg/Question</div>
+            <div className="text-base sm:text-lg font-mono font-bold text-white">{avgTimePerQuestion}s</div>
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-sans">Avg/Question</div>
           </div>
         </div>
 
         {/* Question Review */}
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Question Review</h2>
+        <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">Question Review</h2>
         <div className="space-y-2 mb-10">
           {questionResults.map((result, idx) => (
-            <div key={result.question.id} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <div key={result.question.id} className="glass-panel rounded-xl overflow-hidden hover:border-sky-500/30 transition-all">
               <button
                 onClick={() => setExpandedQuestion(
                   expandedQuestion === result.question.id ? null : result.question.id
@@ -196,19 +196,19 @@ const SessionSummary: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={handlePracticeAgain}
-            className="flex-1 bg-sky-500 hover:bg-sky-400 text-white font-semibold rounded-lg py-2.5 text-sm transition-colors"
+            className="flex-1 bg-sky-500 hover:bg-sky-400 text-white font-semibold rounded-xl py-3 text-sm transition-all shadow-lg shadow-sky-500/20 hover:scale-[1.02] active:scale-[0.98]"
           >
             Practice Again
           </button>
           <button
             onClick={handleTryAnother}
-            className="flex-1 border border-slate-700 text-slate-300 hover:bg-slate-800 rounded-lg py-2.5 text-sm transition-colors"
+            className="flex-1 glass-panel text-slate-300 hover:text-white hover:border-sky-500/30 rounded-xl py-3 text-sm transition-all text-center"
           >
             Try Another Chapter
           </button>
           <Link
-            to="/analytics"
-            className="flex-1 border border-slate-700 text-slate-300 hover:bg-slate-800 rounded-lg py-2.5 text-sm transition-colors text-center"
+             to="/analytics"
+             className="flex-1 glass-panel text-slate-300 hover:text-white hover:border-sky-500/30 rounded-xl py-3 text-sm transition-all text-center"
           >
             View Analytics
           </Link>

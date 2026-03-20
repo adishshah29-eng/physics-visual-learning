@@ -82,10 +82,10 @@ const Leaderboard: React.FC = () => {
   };
 
   const getRankBg = (rank: number) => {
-    if (rank === 1) return 'bg-yellow-500/5 border-yellow-500/20';
-    if (rank === 2) return 'bg-slate-400/5 border-slate-400/20';
-    if (rank === 3) return 'bg-amber-600/5 border-amber-600/20';
-    return 'bg-slate-900 border-slate-800';
+    if (rank === 1) return 'glass-panel bg-yellow-500/10 border-yellow-500/30';
+    if (rank === 2) return 'glass-panel bg-slate-400/10 border-slate-400/30';
+    if (rank === 3) return 'glass-panel bg-amber-600/10 border-amber-600/30';
+    return 'glass-panel hover:bg-slate-800/20';
   };
 
   const getInitials = (name: string) => {
@@ -98,11 +98,11 @@ const Leaderboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Leaderboard</h1>
-        <p className="text-slate-400 mb-8">See how you rank among your peers.</p>
+        <h1 className="text-3xl font-display tracking-wide mb-2">Leaderboard</h1>
+        <p className="text-slate-400 mb-8 font-sans">See how you rank among your peers.</p>
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-8">
@@ -143,7 +143,7 @@ const Leaderboard: React.FC = () => {
             <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
           </div>
         ) : entries.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center">
+          <div className="glass-panel rounded-xl p-8 text-center shadow-lg">
             <Trophy className="w-10 h-10 text-slate-600 mx-auto mb-3" />
             <p className="text-slate-400 mb-2">No leaderboard data yet</p>
             <p className="text-slate-500 text-sm">
@@ -153,7 +153,7 @@ const Leaderboard: React.FC = () => {
         ) : (
           <>
             {/* Table Header */}
-            <div className="hidden sm:grid grid-cols-[50px_1fr_100px_80px_80px_80px] gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+            <div className="hidden sm:grid grid-cols-[50px_1fr_100px_80px_80px_80px] gap-2 px-4 py-3 glass-nav rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-4 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
               <span>Rank</span>
               <span>Name</span>
               <span className="text-right">Score</span>
@@ -172,7 +172,7 @@ const Leaderboard: React.FC = () => {
                   <div
                     key={entry.id}
                     className={`grid grid-cols-[50px_1fr] sm:grid-cols-[50px_1fr_100px_80px_80px_80px] gap-2 items-center px-4 py-3 rounded-xl border transition-all ${
-                      isCurrentUser ? 'bg-sky-500/5 border-sky-500/30' : getRankBg(rank)
+                      isCurrentUser ? 'glass-panel bg-sky-500/10 border-sky-500/50 shadow-[0_0_15px_rgba(56,189,248,0.15)] ring-1 ring-sky-500/20' : getRankBg(rank)
                     }`}
                   >
                     <div className="flex items-center">{getRankIcon(rank)}</div>
@@ -191,21 +191,21 @@ const Leaderboard: React.FC = () => {
                             <span className="ml-2 text-xs text-sky-400">(You)</span>
                           )}
                         </div>
-                        <div className="text-xs text-slate-500 sm:hidden">
+                        <div className="text-xs text-slate-500 sm:hidden font-mono">
                           {entry.total_score} pts • {entry.questions_solved} solved
                         </div>
                       </div>
                     </div>
-                    <div className="hidden sm:block text-right text-sm font-semibold text-white">
+                    <div className="hidden sm:block text-right text-sm font-mono font-bold text-white">
                       {entry.total_score}
                     </div>
-                    <div className="hidden sm:block text-right text-sm text-slate-400">
+                    <div className="hidden sm:block text-right text-sm font-mono text-slate-400">
                       {entry.questions_solved}
                     </div>
-                    <div className="hidden sm:block text-right text-sm text-slate-400">
+                    <div className="hidden sm:block text-right text-sm font-mono text-slate-400">
                       {Math.round(entry.accuracy * 100)}%
                     </div>
-                    <div className="hidden sm:block text-right text-sm text-slate-400">
+                    <div className="hidden sm:block text-right text-sm font-mono text-slate-400">
                       🔥 {entry.streak_days}
                     </div>
                   </div>
@@ -215,13 +215,13 @@ const Leaderboard: React.FC = () => {
 
             {/* User's own card (sticky) */}
             {userEntry && userRank && userRank > 10 && (
-              <div className="sticky bottom-4 bg-sky-500/10 border border-sky-500/30 rounded-xl p-4 backdrop-blur-sm">
+              <div className="sticky bottom-4 glass-panel bg-sky-500/10 border-sky-500/40 border-2 rounded-xl p-4 shadow-[0_0_30px_rgba(56,189,248,0.2)]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-semibold text-sky-400">Your Rank: #{userRank}</span>
-                    <span className="text-xs text-slate-400">{userEntry.total_score} pts</span>
+                    <span className="text-xs text-slate-400 font-mono">{userEntry.total_score} pts</span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 font-mono">
                     <span>{userEntry.questions_solved} solved</span>
                     <span>{Math.round(userEntry.accuracy * 100)}% acc</span>
                     <span>🔥 {userEntry.streak_days}</span>
@@ -233,9 +233,9 @@ const Leaderboard: React.FC = () => {
         )}
 
         {/* Score Formula */}
-        <div className="mt-8 bg-slate-900/50 border border-slate-800 rounded-xl p-5 text-center">
-          <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mb-2">Score Formula</p>
-          <p className="text-sm text-slate-400">
+        <div className="mt-8 glass-panel rounded-xl p-5 text-center">
+          <p className="text-xs text-slate-500 uppercase tracking-wider font-bold mb-2 font-sans">Score Formula</p>
+          <p className="text-sm text-slate-400 font-sans">
             Score = Correct × Difficulty Multiplier{' '}
             <span className="text-slate-500">(Easy = 1pt, JEE Main = 2pt, Advanced = 3pt)</span>
           </p>

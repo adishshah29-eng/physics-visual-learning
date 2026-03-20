@@ -2,21 +2,21 @@ const SHMExplore = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-light text-foreground mb-2">
+        <h2 className="text-2xl font-light text-white mb-2">
           Simple Harmonic Motion
         </h2>
-        <p className="text-muted-foreground leading-relaxed">
+        <p className="text-slate-400 leading-relaxed">
           SHM is the most important type of periodic motion in physics.
           It describes springs, pendulums, sound waves, and even
           quantum mechanical systems.
         </p>
       </div>
 
-      <div className="glass-panel p-5 rounded-lg border-l-4 border-primary">
+      <div className="glass-panel p-5 rounded-lg border-l-4 border-sky-400">
         <h3 className="text-sm font-semibold text-primary uppercase mb-2">
           Core Idea
         </h3>
-        <p className="text-sm text-foreground/90">
+        <p className="text-sm text-white/90">
           An object undergoes SHM when the <b>restoring force is
           proportional to displacement</b> and directed toward
           equilibrium. The more you displace it, the harder it
@@ -25,10 +25,10 @@ const SHMExplore = () => {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-lg font-medium text-foreground">
+        <h3 className="text-lg font-display tracking-wide text-white">
           Real World Examples
         </h3>
-        <ul className="text-sm text-muted-foreground list-disc
+        <ul className="text-sm text-slate-400 list-disc
                        pl-5 space-y-2">
           <li>
             <b>Spring-mass system</b> — the classic SHM example
@@ -51,25 +51,25 @@ const SHMExplore = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-secondary/40 p-4 rounded-lg">
           <div className="text-lg mb-1">🌊</div>
-          <h4 className="text-sm font-medium text-foreground">
+          <h4 className="text-sm font-display tracking-wide text-white">
             Periodic Motion
           </h4>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-slate-400">
             The motion repeats itself after every time period T.
           </p>
         </div>
         <div className="bg-secondary/40 p-4 rounded-lg">
           <div className="text-lg mb-1">⚖️</div>
-          <h4 className="text-sm font-medium text-foreground">
+          <h4 className="text-sm font-display tracking-wide text-white">
             Energy Conservation
           </h4>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-slate-400">
             KE and PE keep exchanging but total energy stays constant.
           </p>
         </div>
       </div>
 
-      <div className="text-xs text-muted-foreground italic">
+      <div className="text-xs text-slate-400 italic">
         In this simulation, we model a horizontal spring-mass system.
         Gravity effects are ignored (horizontal surface).
       </div>

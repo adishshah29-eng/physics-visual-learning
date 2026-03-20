@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import { Target, TrendingUp, Flame, Clock, BookOpen, Loader2, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
-import { getKnowledgeState, getAttemptsByUser } from '@/lib/supabase-helpers';
+import { getKnowledgeState, getAnalyticsAttempts } from '@/lib/supabase-helpers';
 import {
   predictJEEScore, getWeakChapters, getStrongChapters,
   getReadinessPercentage, getStudyRecommendation,
@@ -50,9 +50,16 @@ const Analytics: React.FC = () => {
         const ks = await getKnowledgeState(user.id);
         setKnowledgeStates(ks);
 
-        // All attempts
-        const attempts = await getAttemptsByUser(user.id);
-        setTotalSolved(attempts.length);
+        // Optimized count only for total solved
+        const { count, error: countError } = await supabase
+          .from('attempts')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id);
+        
+        if (!countError) setTotalSolved(count || 0);
+
+        // Lightweight attempts for analytics (essential fields only)
+        const attempts = await getAnalyticsAttempts(user.id);
 
         // Study time (sum of time_taken_ms)
         const totalMs = attempts.reduce((s, a) => s + a.time_taken_ms, 0);
@@ -88,10 +95,10 @@ const Analytics: React.FC = () => {
           .from('leaderboard_scores')
           .select('streak_days')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
         setStreak((lb as any)?.streak_days ?? 0);
 
-        // Actual Difficulty breakdown using joined questions data
+        // Actual Difficulty breakdown using joined questions data (minimal payload)
         let easyCount = 0;
         let mainCount = 0;
         let advCount = 0;
@@ -157,7 +164,7 @@ const Analytics: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="min-h-screen bg-transparent text-slate-100">
         <Navbar />
         <div className="flex items-center justify-center pt-32">
           <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
@@ -169,14 +176,14 @@ const Analytics: React.FC = () => {
   const hasData = totalSolved > 0 || knowledgeStates.length > 0;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Analytics</h1>
-        <p className="text-slate-400 mb-8">Track your progress and performance.</p>
+        <h1 className="text-3xl font-display tracking-wide mb-2">Analytics</h1>
+        <p className="text-slate-400 mb-8 font-sans">Track your progress and performance.</p>
 
         {!hasData && (
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center mb-8">
+          <div className="glass-panel rounded-xl p-8 text-center mb-8">
             <AlertCircle className="w-10 h-10 text-slate-600 mx-auto mb-3" />
             <p className="text-slate-400 mb-2">No data yet</p>
             <p className="text-slate-500 text-sm mb-4">Start practicing to see your analytics here.</p>
@@ -198,9 +205,9 @@ const Analytics: React.FC = () => {
             { icon: BookOpen, label: 'Pred. Score', value: predictedScore, color: 'text-violet-400' },
             { icon: Clock, label: 'Study Time', value: `${studyTime}h`, color: 'text-amber-400' },
           ].map((stat) => (
-            <div key={stat.label} className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4">
+            <div key={stat.label} className="glass-panel rounded-xl p-3 sm:p-4 hover:border-sky-500/30 transition-colors">
               <stat.icon className={`w-4 h-4 ${stat.color} mb-2`} />
-              <div className="text-lg sm:text-xl font-bold text-white">{stat.value}</div>
+              <div className="text-lg sm:text-xl font-mono font-bold text-white">{stat.value}</div>
               <div className="text-[10px] text-slate-500 uppercase tracking-wider leading-tight">{stat.label}</div>
             </div>
           ))}
@@ -210,10 +217,10 @@ const Analytics: React.FC = () => {
           <>
             {/* Section 2: Performance Over Time */}
             <section className="mb-10">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+              <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 Performance Over Time (Last 14 Days)
               </h2>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+              <div className="glass-panel rounded-xl p-6">
                 {dailyData.some(d => d.attempted > 0) ? (
                   <ResponsiveContainer width="100%" height={280}>
                     <LineChart data={dailyData}>
@@ -237,13 +244,13 @@ const Analytics: React.FC = () => {
 
             {/* Section 3: Subject Performance */}
             <section className="mb-10">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+              <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 Subject Performance
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {subjectAccuracies.map((sub) => (
-                  <div key={sub.subject} className="bg-slate-900 border border-slate-800 rounded-xl p-5 text-center">
-                    <div className="text-3xl font-bold text-white mb-1">{sub.accuracy}%</div>
+                  <div key={sub.subject} className="glass-panel rounded-xl p-5 text-center">
+                    <div className="text-3xl font-mono font-bold text-white mb-1">{sub.accuracy}%</div>
                     <div className="text-sm text-slate-400 mb-3">{sub.subject}</div>
                     <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                       <div
@@ -258,7 +265,7 @@ const Analytics: React.FC = () => {
 
             {/* Section 4: Chapter Mastery */}
             <section className="mb-10">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+              <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 Chapter Mastery
               </h2>
               {/* Subject tabs */}
@@ -277,7 +284,7 @@ const Analytics: React.FC = () => {
                   </button>
                 ))}
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+              <div className="glass-panel rounded-xl p-6">
                 {subjectKnowledgeStates.length > 0 ? (
                   <ResponsiveContainer width="100%" height={Math.max(200, subjectKnowledgeStates.length * 40)}>
                     <BarChart data={subjectKnowledgeStates.map(k => ({
@@ -312,7 +319,7 @@ const Analytics: React.FC = () => {
 
             {/* Section 5: Weak vs Strong */}
             <section className="mb-10">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+              <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 Weak vs Strong Topics
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -339,7 +346,7 @@ const Analytics: React.FC = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="text-sm text-slate-500 bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
+                    <div className="text-sm text-slate-500 glass-panel rounded-lg p-4 text-center">
                       No weak topics detected! Great work.
                     </div>
                   )}
@@ -359,7 +366,7 @@ const Analytics: React.FC = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="text-sm text-slate-500 bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
+                    <div className="text-sm text-slate-500 glass-panel rounded-lg p-4 text-center">
                       Keep practicing to build strong topics!
                     </div>
                   )}
@@ -369,10 +376,10 @@ const Analytics: React.FC = () => {
 
             {/* Section 6: Difficulty Breakdown */}
             <section className="mb-10">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+              <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 Difficulty Breakdown
               </h2>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-6 flex flex-col items-center md:flex-row gap-6">
+              <div className="glass-panel rounded-xl p-4 sm:p-6 flex flex-col items-center md:flex-row gap-6">
                 <div className="w-48 h-48">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -407,26 +414,27 @@ const Analytics: React.FC = () => {
 
             {/* Section 7: ML Insights */}
             <section>
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+              <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 ML Insights
               </h2>
-              <div className="bg-gradient-to-br from-slate-900 to-sky-950/30 border border-slate-800 rounded-xl p-6">
-                <p className="text-slate-400 text-sm mb-6">Based on your performance:</p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                  <div className="bg-slate-900/80 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-sky-400">{predictedScore}</div>
+              <div className="glass-panel rounded-xl p-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-sky-950/20 pointer-events-none" />
+                <p className="text-slate-400 text-sm mb-6 relative">Based on your performance:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 relative">
+                  <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
+                    <div className="text-2xl font-mono font-bold text-sky-400">{predictedScore}</div>
                     <div className="text-xs text-slate-500">Predicted Score</div>
                   </div>
-                  <div className="bg-slate-900/80 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-emerald-400">{readiness}%</div>
+                  <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
+                    <div className="text-2xl font-mono font-bold text-emerald-400">{readiness}%</div>
                     <div className="text-xs text-slate-500">Readiness</div>
                   </div>
-                  <div className="bg-slate-900/80 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-violet-400">{weakChapters.length}</div>
+                  <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
+                    <div className="text-2xl font-mono font-bold text-violet-400">{weakChapters.length}</div>
                     <div className="text-xs text-slate-500">Areas to Improve</div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-slate-800">
+                <div className="bg-slate-900/40 rounded-lg p-4 border border-slate-800/50 backdrop-blur-md relative">
                   <p className="text-sm text-slate-300 leading-relaxed">
                     💡 {recommendation}
                   </p>

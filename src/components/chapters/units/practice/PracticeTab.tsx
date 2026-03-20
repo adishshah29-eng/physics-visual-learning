@@ -18,8 +18,8 @@ const PracticeTab = () => {
             onClick={() => setLevel(l)}
             className={`px-4 py-2 text-xs rounded-lg border ${
               level === l
-                ? "bg-primary/20 border-primary text-primary"
-                : "border-border text-muted-foreground"
+                ? "bg-primary/20 border-sky-400 text-primary"
+                : "border-border text-slate-400"
             }`}
           >
             {l === "easy" ? "Easy" : l === "jee" ? "JEE Main" : "JEE Advanced"}
@@ -33,7 +33,7 @@ const PracticeTab = () => {
       ))}
 
       {filtered.length === 0 && (
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-slate-400">
           No questions available for this level.
         </div>
       )}

@@ -166,7 +166,7 @@ export default function ThermodynamicsPlayground() {
   })();
 
   return (
-    <div className="flex flex-col bg-slate-950 text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
+    <div className="flex flex-col bg-transparent text-slate-100 p-4 space-y-4 overflow-y-auto min-h-full">
 
       <div>
         <h2 className="text-xl font-bold text-sky-400">Thermodynamics — PV Processes</h2>
@@ -201,7 +201,7 @@ export default function ThermodynamicsPlayground() {
 
       {/* Carnot temperatures */}
       {viewMode === 'carnot' && (
-        <div className="flex gap-4 flex-wrap bg-slate-900 border border-slate-800 rounded-xl p-3">
+        <div className="flex gap-4 flex-wrap glass-panel rounded-xl p-3">
           <div className="flex-1 min-w-[120px]">
             <NumberInput label="Hot Reservoir T_H" unit="K" value={carnotTH} onChange={v => { setCarnotTH(v); handleReset(); }} />
           </div>
@@ -217,7 +217,7 @@ export default function ThermodynamicsPlayground() {
       )}
 
       {/* Main PV + Piston */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden relative">
+      <div className="glass-panel rounded-xl overflow-hidden relative">
         <svg viewBox="0 0 620 280" className="w-full h-auto">
           <defs>
             <pattern id="thgrid2" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -326,7 +326,7 @@ export default function ThermodynamicsPlayground() {
 
       {/* Subtask 4: Comparison Table */}
       {viewMode === 'compare' && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+        <div className="glass-panel rounded-xl p-4 overflow-x-auto">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Process Comparison (V₁ → 3V₁)</h3>
           <table className="w-full text-xs font-mono">
             <thead>
@@ -361,7 +361,7 @@ export default function ThermodynamicsPlayground() {
 
       {/* Energy bars (single mode) */}
       {viewMode === 'single' && (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+        <div className="glass-panel rounded-xl p-4 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Energy Exchange (Q = ΔU + W)</h3>
           <EnergyBar label="Heat (Q)" value={cur.Q} color="bg-red-500" textColor="text-red-400" />
           <EnergyBar label="Work (W)" value={cur.W} color="bg-emerald-500" textColor="text-emerald-400" />
@@ -378,14 +378,14 @@ export default function ThermodynamicsPlayground() {
 
       {/* Parameters + Results */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-4">
+        <div className="glass-panel rounded-xl p-4 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Parameters</h3>
           <NumberInput label="Moles (n)" unit="mol" value={n} onChange={v => { setN(v); handleReset(); }} />
           <NumberInput label="Initial Temperature" unit="K" value={T1} onChange={v => { setT1(v); handleReset(); }} />
           <NumberInput label="Initial Volume" unit="L" value={V1} onChange={v => { setV1(v); handleReset(); }} />
           <NumberInput label="γ (Cp/Cv)" unit="" value={gamma} onChange={v => { setGamma(Math.min(Math.max(v, 1.01), 1.67)); handleReset(); }} />
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+        <div className="glass-panel rounded-xl p-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Live Results</h3>
           <div className="grid grid-cols-2 gap-2">
             <Result label="Pressure" value={`${cur.P_atm.toFixed(3)} atm`} color="text-sky-400" />

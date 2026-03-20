@@ -3,21 +3,21 @@ const ProjectileUnderstand = () => {
     <div className="space-y-6">
 
       <div>
-        <h2 className="text-xl font-medium text-foreground">
+        <h2 className="text-xl font-display tracking-wide text-white">
           Mathematical Description
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           Projectile motion is analyzed by resolving motion into horizontal
           and vertical components.
         </p>
       </div>
 
       {/* Horizontal Motion */}
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-md font-medium text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-md font-display tracking-wide text-white">
           Horizontal Motion (x-direction)
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           There is no acceleration in the horizontal direction.
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded inline-block">
@@ -29,11 +29,11 @@ const ProjectileUnderstand = () => {
       </div>
 
       {/* Vertical Motion */}
-      <div className="bg-secondary/30 p-4 rounded-lg space-y-2">
-        <h3 className="text-md font-medium text-foreground">
+      <div className="glass-panel p-4 rounded-lg space-y-2">
+        <h3 className="text-md font-display tracking-wide text-white">
           Vertical Motion (y-direction)
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-400">
           The vertical motion is uniformly accelerated due to gravity.
         </p>
         <div className="font-mono text-sm text-primary bg-black/20 p-2 rounded inline-block">
@@ -46,7 +46,7 @@ const ProjectileUnderstand = () => {
 
       {/* Key Results */}
       <div className="bg-secondary/40 p-4 rounded-lg space-y-3">
-        <h3 className="text-md font-medium text-foreground">
+        <h3 className="text-md font-display tracking-wide text-white">
           Important Results (JEE Focus)
         </h3>
 
@@ -63,7 +63,7 @@ const ProjectileUnderstand = () => {
         </div>
       </div>
 
-      <div className="text-xs text-muted-foreground italic">
+      <div className="text-xs text-slate-400 italic">
         These results are valid only when the projectile lands at the same level
         from which it was projected.
       </div>

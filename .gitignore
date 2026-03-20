@@ -29,6 +29,12 @@ JEE_Main_PDFs.zip
 
 # MCQ Data
 mcqs/
-scripts/map_physics.js
-scripts/physics_to_csv.js
-scripts/get_chapters.js
+scripts/
+
+# Development Utilities and Reference Data
+apply_theme_chapters.cjs
+components.json
+config.json
+supabase_migration.sql
+.txt
+*.zip

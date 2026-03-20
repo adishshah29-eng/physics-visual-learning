@@ -149,7 +149,7 @@ const SubjectSelect: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="min-h-screen bg-transparent text-slate-100">
         <Navbar />
         <div className="flex items-center justify-center pt-32">
           <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
@@ -159,15 +159,15 @@ const SubjectSelect: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-transparent text-slate-100">
       <Navbar />
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto">
         <div className="mb-10">
-          <Link to="/practice" className="text-sm text-slate-500 hover:text-slate-400 mb-4 inline-block">
+          <Link to="/practice" className="text-sm text-slate-500 hover:text-slate-400 mb-4 inline-block font-sans">
             ← Back to Exams
           </Link>
-          <h1 className="text-3xl font-bold mb-2">{examLabel}</h1>
-          <p className="text-slate-400">Choose a subject to practice.</p>
+          <h1 className="text-3xl font-display tracking-wide mb-2">{examLabel}</h1>
+          <p className="text-slate-400 font-sans">Choose a subject to practice.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -177,21 +177,21 @@ const SubjectSelect: React.FC = () => {
               <button
                 key={sub.id}
                 onClick={() => navigate(`/practice/${exam}/${sub.id}/chapters`)}
-                className={`bg-slate-900 border border-slate-800 rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group`}
+                className={`glass-panel rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group relative overflow-hidden`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg}`}>
                   <span className="text-2xl">{sub.icon}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-1">{sub.label}</h3>
-                <p className="text-slate-500 text-xs mb-4">
+                <h3 className="text-xl font-display tracking-wide mb-1">{sub.label}</h3>
+                <p className="text-slate-500 text-xs mb-4 font-mono uppercase tracking-wider">
                   {sub.chapterCount} chapters
                 </p>
 
                 {/* Mastery bar */}
                 <div className="mb-2">
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-500">Mastery</span>
-                    <span className={colors.text}>{sub.mastery}%</span>
+                    <span className="text-slate-500 uppercase tracking-widest font-bold text-[10px]">Mastery</span>
+                    <span className={`${colors.text} font-mono font-bold`}>{sub.mastery}%</span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
                     <div

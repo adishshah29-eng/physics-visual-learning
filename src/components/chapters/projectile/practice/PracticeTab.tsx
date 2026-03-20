@@ -25,7 +25,7 @@ const PracticeTab: React.FC = () => {
             className={`px-4 py-2 rounded-lg text-sm ${
               level === l
                 ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-muted-foreground"
+                : "bg-secondary text-slate-400"
             }`}
           >
             {l.toUpperCase()}
@@ -47,7 +47,7 @@ const PracticeTab: React.FC = () => {
           </button>
         </>
       ) : (
-        <div className="text-muted-foreground text-sm">
+        <div className="text-slate-400 text-sm">
           No questions available.
         </div>
       )}

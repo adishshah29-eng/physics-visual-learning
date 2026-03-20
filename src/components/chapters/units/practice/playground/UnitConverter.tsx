@@ -54,8 +54,8 @@ const UnitConverter = () => {
             className={`px-3 py-1 text-xs rounded border transition
               ${
                 quantity === q
-                  ? "bg-primary/20 text-primary border-primary"
-                  : "border-border text-muted-foreground hover:bg-secondary/40"
+                  ? "bg-primary/20 text-primary border-sky-400"
+                  : "border-border text-slate-400 hover:bg-secondary/40"
               }`}
           >
             {q.toUpperCase()}
@@ -87,7 +87,7 @@ const UnitConverter = () => {
       </div>
 
       {/* ================= Arrow ================= */}
-      <div className="text-center text-muted-foreground">↓</div>
+      <div className="text-center text-slate-400">↓</div>
 
       {/* ================= Output ================= */}
       <div className="grid grid-cols-2 gap-4">
@@ -112,7 +112,7 @@ const UnitConverter = () => {
       </div>
 
       {/* ================= Dimension ================= */}
-      <div className="text-xs text-muted-foreground">
+      <div className="text-xs text-slate-400">
         Dimensional formula: [{unitMap[quantity].dimension}]
       </div>
     </div>
