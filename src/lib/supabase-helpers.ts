@@ -144,34 +144,50 @@ CREATE POLICY "Users can update own leaderboard" ON public.leaderboard_scores
 // ─── Profile Helpers ───────────────────────────────────────────────────────────
 
 export async function getProfile(userId: string): Promise<Profile | null> {
-  const { data, error } = await supabase
+  const { data: profileData, error: profileError } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', userId)
     .single();
 
-  if (error) {
-    if (error.code === 'PGRST116') return null; // Not found
-    console.error('Error fetching profile:', error);
+  if (profileError || !profileData) {
+    if (profileError && profileError.code !== 'PGRST116') {
+      console.error('Error fetching profile:', profileError);
+    }
     return null;
   }
-  return data;
+
+  // Fetch streak separately to avoid PostgREST relationship errors
+  const { data: lbData } = await supabase
+    .from('leaderboard_scores')
+    .select('streak_days')
+    .eq('user_id', userId)
+    .single();
+
+  const profile = {
+    ...(profileData as Record<string, any>),
+    streak_days: lbData ? (lbData as any).streak_days : 0
+  };
+
+  return profile as unknown as Profile;
 }
 
 export async function upsertProfile(
   profile: ProfileInsert | ProfileUpdate & { id: string }
-): Promise<Profile | null> {
+): Promise<{ data: Profile | null, error: any }> {
+  const payload = { ...profile } as any;
+  delete payload.streak_days;
+
   const { data, error } = await supabase
     .from('profiles')
-    .upsert(profile as any)
+    .upsert(payload)
     .select()
     .single();
 
   if (error) {
     console.error('Error upserting profile:', error);
-    return null;
   }
-  return data;
+  return { data, error };
 }
 
 // ─── Attempt Helpers ───────────────────────────────────────────────────────────
@@ -405,6 +421,30 @@ export async function updateLeaderboardScore(userId: string): Promise<void> {
     } as any,
     { onConflict: 'user_id' }
   );
+}
+
+export async function getAdminUsers(): Promise<any[]> {
+  const { data: profiles, error: profileErr } = await supabase
+    .from('profiles')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (profileErr) {
+    console.error('Error fetching admin users:', profileErr);
+    return [];
+  }
+
+  const { data: scores } = await supabase
+    .from('leaderboard_scores')
+    .select('user_id, streak_days, total_score, questions_solved');
+
+  return ((profiles as any[]) || []).map((p: any) => {
+    const userScore = (scores as any[])?.find((s: any) => s.user_id === p.id);
+    return {
+      ...(p as Record<string, any>),
+      leaderboard_scores: userScore ? [userScore] : []
+    };
+  });
 }
 
 function getYesterday(): string {

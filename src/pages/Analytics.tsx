@@ -139,7 +139,16 @@ const Analytics: React.FC = () => {
   const readiness = useMemo(() => getReadinessPercentage(knowledgeStates), [knowledgeStates]);
   const recommendation = useMemo(() => getStudyRecommendation(knowledgeStates), [knowledgeStates]);
   const weakChapters = useMemo(() => getWeakChapters(knowledgeStates), [knowledgeStates]);
-  const strongChapters = useMemo(() => getStrongChapters(knowledgeStates), [knowledgeStates]);
+  const strongChapters = useMemo(() => {
+    const strong = getStrongChapters(knowledgeStates);
+    if (strong.length > 0) return strong;
+    // Fallback: Show top 3 chapters with any mastery
+    return knowledgeStates
+      .filter(ks => ks.mastery > 0.3)
+      .sort((a, b) => b.mastery - a.mastery)
+      .slice(0, 3)
+      .map(ks => ks.chapter);
+  }, [knowledgeStates]);
 
   const subjectKnowledgeStates = useMemo(
     () => knowledgeStates.filter((k) => k.subject === selectedSubject),
@@ -310,8 +319,10 @@ const Analytics: React.FC = () => {
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-48 flex items-center justify-center text-slate-500 text-sm">
-                    No mastery data for this subject yet.
+                  <div className="h-[200px] flex flex-col items-center justify-center text-slate-500 border border-slate-800/50 rounded-xl bg-slate-900/10 border-dashed">
+                    <BookOpen className="w-8 h-8 mb-2 opacity-20" />
+                    <p className="text-sm">No data for {selectedSubject.replace(/-/g, ' ')}</p>
+                    <p className="text-[10px] uppercase tracking-widest font-bold mt-1">Attempt some simulations first</p>
                   </div>
                 )}
               </div>

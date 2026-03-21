@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Atom, ArrowLeft, Flame, ChevronDown, LogOut, User, Settings } from 'lucide-react';
+import { Atom, ArrowLeft, Flame, ChevronDown, LogOut, User, Settings, Shield } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 
@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
   const getInitials = (name: string) =>
     name.split(' ').map((n) => n.charAt(0)).join('').toUpperCase().slice(0, 2);
 
-  const streak = 0;
+  const streak = profile?.streak_days || 0;
 
   // ─── PUBLIC NAVBAR ───────────────────────────────────────────────────────────
   if (isPublicRoute && !isAuthenticated) {
@@ -146,6 +146,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
                     <p className="text-xs text-slate-500 truncate">{profile?.email || ''}</p>
                   </div>
                   <div className="py-1">
+                    {profile?.role === 'admin' && (
+                      <Link to="/admin" onClick={() => setDropdownOpen(false)} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-sky-400 hover:bg-sky-500/10 transition-colors border-b border-sky-500/10">
+                        <Shield className="w-4 h-4" /> Admin Portal
+                      </Link>
+                    )}
                     <Link to="/profile" onClick={() => setDropdownOpen(false)} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800 transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>

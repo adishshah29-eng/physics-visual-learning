@@ -29,6 +29,11 @@ import Leaderboard from '@/pages/Leaderboard';
 import Profile from '@/pages/Profile';
 import Settings from '@/pages/Settings';
 
+// Admin Pages
+import AdminRoute from '@/components/AdminRoute';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
+import UserDetailAnalytics from '@/pages/admin/UserDetailAnalytics';
+
 // Other
 import NotFound from '@/pages/NotFound';
 import Atmosphere from '@/components/Atmosphere';
@@ -71,6 +76,12 @@ function AppContent() {
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
+
+          {/* Admin Portal */}
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/analytics/:userId" element={<UserDetailAnalytics />} />
+          </Route>
         </Route>
 
         {/* 404 */}

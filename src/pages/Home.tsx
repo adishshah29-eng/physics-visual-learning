@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Atom, BookOpen, BarChart3, Clock, Flame, Target, TrendingUp, ChevronRight } from 'lucide-react';
+import { Atom, BookOpen, BarChart3, Clock, Flame, Target, TrendingUp, ChevronRight, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { getKnowledgeState, getAttemptsByUser } from '@/lib/supabase-helpers';
 import { getReadinessPercentage, predictJEEScore } from '@/services/ml/performancePredictor';
@@ -18,6 +18,7 @@ const Home: React.FC = () => {
   });
   const [lastChapter, setLastChapter] = useState<string | null>(null);
   const [dueReviewCount, setDueReviewCount] = useState(0);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -69,6 +70,10 @@ const Home: React.FC = () => {
         // Last chapter from localStorage
         const saved = localStorage.getItem('lastChapter');
         setLastChapter(saved);
+
+        // Recent activity
+        const activities = await getAttemptsByUser(user.id, { limit: 3 });
+        setRecentActivity(activities);
       } catch (err) {
         console.error('Error loading home data:', err);
       } finally {
@@ -217,6 +222,57 @@ const Home: React.FC = () => {
                 </span>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Recent Activity */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-sans">
+              Recent Activity
+            </h2>
+            <Link to="/profile" className="text-xs text-sky-400 hover:text-sky-300 transition-colors">View All</Link>
+          </div>
+          <div className="space-y-3">
+            {isLoading ? (
+              <div className="glass-panel rounded-xl p-8 flex flex-col items-center justify-center">
+                <Loader2 className="w-5 h-5 animate-spin text-sky-400 mb-2" />
+                <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Syncing progress...</p>
+              </div>
+            ) : recentActivity.length > 0 ? (
+              recentActivity.map((activity) => (
+                <div key={activity.id} className="glass-panel rounded-xl p-4 flex items-center justify-between group hover:border-sky-500/20 transition-all">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      activity.is_correct ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
+                    }`}>
+                      <Target className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-white capitalize">
+                        {activity.questions?.chapter?.replace(/-/g, ' ')}
+                      </div>
+                      <div className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">
+                        {activity.questions?.subject} • {new Date(activity.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-xs font-bold font-mono ${
+                      activity.is_correct ? 'text-emerald-400' : 'text-red-400'
+                    }`}>
+                      {activity.is_correct ? 'CORRECT' : 'WRONG'}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="glass-panel border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-slate-500">
+                <Clock className="w-8 h-8 opacity-20 mb-3" />
+                <p className="text-sm">No recent activity detected.</p>
+                <p className="text-[10px] uppercase tracking-widest font-bold mt-1">Start a simulation to see it here</p>
+              </div>
+            )}
           </div>
         </section>
 

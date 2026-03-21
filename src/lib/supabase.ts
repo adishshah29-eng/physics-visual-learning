@@ -13,6 +13,8 @@ export interface Database {
           batch: string;
           target_exam: string;
           avatar_url: string | null;
+          role: string;
+          streak_days: number;
           created_at: string;
           last_seen: string;
         };
@@ -23,6 +25,8 @@ export interface Database {
           batch: string;
           target_exam: string;
           avatar_url?: string | null;
+          role?: string;
+          streak_days?: number;
           created_at?: string;
           last_seen?: string;
         };
@@ -33,6 +37,8 @@ export interface Database {
           batch?: string;
           target_exam?: string;
           avatar_url?: string | null;
+          role?: string;
+          streak_days?: number;
           created_at?: string;
           last_seen?: string;
         };

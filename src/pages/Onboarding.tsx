@@ -22,7 +22,7 @@ const levelOptions = [
 
 const Onboarding: React.FC = () => {
   const navigate = useNavigate();
-  const { user, updateProfile } = useAuthStore();
+  const { user, updateProfile, signOut } = useAuthStore();
 
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -97,12 +97,21 @@ const Onboarding: React.FC = () => {
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 text-sky-400 mb-4">
+        <div className="text-center mb-8 relative">
+          <div className="flex items-center justify-center gap-2 text-sky-400 mb-4 cursor-pointer" onClick={() => navigate('/')}>
             <Atom className="w-6 h-6" />
             <span className="font-bold tracking-wider">PHYSICS.LAB</span>
           </div>
           <h1 className="text-2xl font-bold text-white">Let&apos;s set up your profile</h1>
+          <button 
+            onClick={async () => {
+              await signOut();
+              navigate('/', { replace: true });
+            }}
+            className="absolute top-0 right-0 text-slate-500 hover:text-white text-xs font-semibold py-1 px-3 border border-slate-800 rounded-lg transition-colors"
+          >
+            Sign Out
+          </button>
         </div>
 
         {/* Step Indicator */}

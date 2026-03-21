@@ -142,28 +142,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signOut: async () => {
-    await supabase.auth.signOut();
-    set({
-      user: null,
-      profile: null,
-      isAuthenticated: false,
-    });
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Error during global sign out:', error);
+    } finally {
+      set({
+        user: null,
+        profile: null,
+        isAuthenticated: false,
+      });
+    }
   },
 
   updateProfile: async (updates: Partial<ProfileUpdate>) => {
     const { user } = get();
     if (!user) return { error: 'Not authenticated' };
 
-    const result = await upsertProfile({
+    const { data: result, error: upsertError } = await upsertProfile({
       id: user.id,
       ...updates,
     } as Profile);
 
-    if (result) {
+    if (result && !upsertError) {
       set({ profile: result });
       return { error: null };
     }
-    return { error: 'Failed to update profile' };
+    return { error: `Failed to update profile: ${upsertError?.message || 'Unknown error'}` };
   },
 
   setProfile: (profile: Profile | null) => {
