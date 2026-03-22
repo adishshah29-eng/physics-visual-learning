@@ -1,19 +1,19 @@
 import { Scroll } from '@react-three/drei';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 // ─── Shared animation variants ───────────────────────────────────────────────
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
+  visible: (i: number = 0) => ({
     opacity: 1, y: 0,
-    transition: { duration: 0.8, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.8, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
 
-const fadeIn = {
+const fadeIn: Variants = {
   hidden: { opacity: 0 },
-  visible: (i = 0) => ({
+  visible: (i: number = 0) => ({
     opacity: 1,
     transition: { duration: 0.9, delay: i * 0.1, ease: 'easeOut' },
   }),

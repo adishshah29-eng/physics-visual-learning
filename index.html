@@ -6,6 +6,9 @@
     <title>PHYSICS.LAB | Master JEE Physics</title>
     <meta name="description" content="Cinematic, scroll-driven physics learning platform for JEE & NEET aspirants." />
     <meta name="author" content="PHYSICS.LAB" />
+    <meta name="theme-color" content="#C97B2F" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
     <meta property="og:image" content="/og-image.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,5 +18,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>
