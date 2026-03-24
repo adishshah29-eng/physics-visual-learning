@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Atom, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { getProfile } from '@/lib/supabase-helpers';
+import { supabase } from '@/lib/supabase';
 
 type AuthMode = 'signin' | 'signup';
 
@@ -27,6 +28,17 @@ const Auth: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState('');
 
+  const validatePassword = (pwd: string): string | null => {
+    if (!pwd) return 'Password is required';
+    if (pwd.length < 8) return 'Password must be at least 8 characters';
+    if (!/[A-Z]/.test(pwd)) return 'Must include at least one uppercase letter';
+    if (!/[0-9]/.test(pwd)) return 'Must include at least one number';
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)) {
+      return 'Must include at least one special character';
+    }
+    return null;
+  };
+
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -36,11 +48,8 @@ const Auth: React.FC = () => {
       newErrors.email = 'Invalid email format';
     }
 
-    if (!password) {
-      newErrors.password = 'Password is required';
-    } else if (password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
+    const pwdError = validatePassword(password);
+    if (pwdError) newErrors.password = pwdError;
 
     if (mode === 'signup') {
       if (!name.trim()) {
@@ -71,16 +80,7 @@ const Auth: React.FC = () => {
           setIsSubmitting(false);
           return;
         }
-        // Check if profile exists
-        const user = useAuthStore.getState().user;
-        if (user) {
-          const profile = await getProfile(user.id);
-          if (profile) {
-            navigate('/home', { replace: true });
-          } else {
-            navigate('/onboarding', { replace: true });
-          }
-        }
+        // Do not reset isSubmitting; wait for PublicRoute to unmount this component
       } else {
         const { error, needsEmailConfirmation } = await signUpWithEmail(email, password, name);
         if (error) {
@@ -99,11 +99,10 @@ const Auth: React.FC = () => {
           return;
         }
 
-        navigate('/onboarding', { replace: true });
+        // Do not reset isSubmitting; wait for PublicRoute to unmount this component
       }
     } catch {
       setGeneralError('An unexpected error occurred');
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -114,9 +113,32 @@ const Auth: React.FC = () => {
     if (error) setGeneralError(error);
   };
 
-  const handleForgotPassword = () => {
-    setResetSent(true);
-    setTimeout(() => setResetSent(false), 5000);
+  const handleForgotPassword = async () => {
+    setGeneralError('');
+    if (!email.trim()) {
+      setErrors({ email: 'Enter your email address to reset your password' });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setErrors({ email: 'Enter a valid email address' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/auth?mode=reset`,
+      });
+      if (error) {
+        // Never reveal whether the email exists — show generic message
+        console.error('Reset error:', error);
+      }
+      // Always show success to prevent email enumeration attacks
+      setResetSent(true);
+      setTimeout(() => setResetSent(false), 10000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -181,7 +203,7 @@ const Auth: React.FC = () => {
 
           {resetSent && (
             <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3 mb-6">
-              If an account exists with that email, a password reset link has been sent.
+              If an account exists for {email}, a reset link has been sent. Check your inbox.
             </div>
           )}
 

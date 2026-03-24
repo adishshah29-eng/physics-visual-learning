@@ -56,11 +56,11 @@ function LandingNav() {
 // ─── Variants ─────────────────────────────────────────────────────────────────
 const fadeUp = {
   hidden: { opacity: 0, y: 36 },
-  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.75, delay: i * 0.11, ease: [0.16, 1, 0.3, 1] } }),
+  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.75, delay: i * 0.11, ease: [0.16, 1, 0.3, 1] as any } }),
 };
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: (i = 0) => ({ opacity: 1, transition: { duration: 0.8, delay: i * 0.1 } }),
+  visible: (i = 0) => ({ opacity: 1, transition: { duration: 0.8, delay: i * 0.1 } } as any),
 };
 
 const SectionTag = ({ label }: { label: string }) => (
@@ -271,7 +271,7 @@ function Analytics() {
               <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: '10px', color: 'rgb(148,163,184)', letterSpacing: '0.08em', width: '96px', textAlign: 'right', flexShrink: 0 }}>{r.label}</div>
               <div style={{ flex: 1, height: '3px', background: 'rgba(56,189,248,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
                 <motion.div initial={{ width: 0 }} whileInView={{ width: `${r.pct}%` }}
-                  transition={{ duration: 1.1, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 1.1, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] as any }}
                   style={{ height: '100%', background: `linear-gradient(90deg, #0EA5E9, ${r.pct > 70 ? '#7DD3FC' : r.pct > 50 ? '#38BDF8' : '#0369A1'})`, borderRadius: '2px' }} />
               </div>
               <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: '10px', color: r.pct > 70 ? 'rgb(125,211,252)' : r.pct > 50 ? 'rgb(56,189,248)' : 'rgb(14,165,233)', width: '28px', flexShrink: 0 }}>{r.pct}%</div>

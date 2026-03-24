@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Atom, ChevronLeft, ChevronRight, Loader2, Check } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -22,7 +22,15 @@ const levelOptions = [
 
 const Onboarding: React.FC = () => {
   const navigate = useNavigate();
-  const { user, updateProfile, signOut } = useAuthStore();
+  const { user, profile, updateProfile, signOut, isLoading: authLoading } = useAuthStore();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth', { replace: true });
+    } else if (!authLoading && profile) {
+      navigate('/home', { replace: true });
+    }
+  }, [user, profile, authLoading, navigate]);
 
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -92,6 +100,16 @@ const Onboarding: React.FC = () => {
       : 'border-slate-700 hover:border-slate-600 bg-slate-900';
     return base;
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">

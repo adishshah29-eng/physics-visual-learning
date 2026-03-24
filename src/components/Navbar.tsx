@@ -13,6 +13,7 @@ const appNavLinks = [
   { path: '/analytics', label: 'Analytics' },
   { path: '/leaderboard', label: 'Leaderboard' },
   { path: '/learn', label: 'Simulations' },
+  { path: '/chemistry', label: 'Chemistry' },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {

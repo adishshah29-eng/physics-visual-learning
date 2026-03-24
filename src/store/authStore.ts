@@ -98,14 +98,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
     if (error) return { error: error.message };
 
-    if (data.user) {
-      const profile = await getProfile(data.user.id);
-      set({
-        user: data.user,
-        profile,
-        isAuthenticated: true,
-      });
-    }
+    // Rely on the onAuthStateChange listener to set user and profile
     return { error: null };
   },
 
@@ -130,10 +123,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
 
     if (data.user && data.session) {
-      set({
-        user: data.user,
-        isAuthenticated: true,
-      });
+      // Rely on the onAuthStateChange listener to set user and profile
       return { error: null, needsEmailConfirmation: false };
     } else if (data.user && !data.session) {
       return { error: null, needsEmailConfirmation: true };

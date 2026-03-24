@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Play, RotateCcw, Pause } from "lucide-react";
+import { clampPhysics, PHYSICS_LIMITS } from '@/lib/physicsValidation';
 
 /* ================= CONSTANTS ================= */
 
@@ -20,6 +21,19 @@ const SimulationPanel: React.FC = () => {
   const [angle, setAngle] = useState(30);
   const [gravity, setGravity] = useState(9.8);
 
+  const setVelocitySafe = (v: number) => {
+    setVelocity(clampPhysics(v, PHYSICS_LIMITS.velocity));
+    reset();
+  };
+  const setAngleSafe = (v: number) => {
+    setAngle(clampPhysics(v, PHYSICS_LIMITS.angle));
+    reset();
+  };
+  const setGravitySafe = (v: number) => {
+    setGravity(clampPhysics(v, PHYSICS_LIMITS.gravity));
+    reset();
+  };
+
   const [showVectors, setShowVectors] = useState(true);
 
   const [time, setTime] = useState(0);
@@ -32,9 +46,10 @@ const SimulationPanel: React.FC = () => {
   const vx = velocity * Math.cos(rad);
   const vy0 = velocity * Math.sin(rad);
 
-  const T = (2 * velocity * Math.sin(rad)) / gravity;
-  const Hmax = (velocity ** 2 * Math.sin(rad) ** 2) / (2 * gravity);
-  const R = (velocity ** 2 * Math.sin(2 * rad)) / gravity;
+  const safeGravity = gravity > 0 ? gravity : 9.8;
+  const T = (2 * velocity * Math.sin(rad)) / safeGravity;
+  const Hmax = (velocity ** 2 * Math.sin(rad) ** 2) / (2 * safeGravity);
+  const R = (velocity ** 2 * Math.sin(2 * rad)) / safeGravity;
 
   /* ================= AUTO SCALE ================= */
 
@@ -175,11 +190,11 @@ const SimulationPanel: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4 text-sm">
               <InputBox label="Initial Velocity (m/s)" value={velocity}
-                onChange={(v: number) => { setVelocity(v); reset(); }} />
+                onChange={setVelocitySafe} />
               <InputBox label="Angle (°)" value={angle}
-                onChange={(v: number) => { setAngle(v); reset(); }} />
+                onChange={setAngleSafe} />
               <InputBox label="Gravity (m/s²)" value={gravity}
-                onChange={(v: number) => { setGravity(v); reset(); }} />
+                onChange={setGravitySafe} />
             </div>
           </div>
 
@@ -211,9 +226,9 @@ const SimulationPanel: React.FC = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <Slider label="Velocity" value={velocity} min={5} max={60}
-            onChange={(v: number) => { setVelocity(v); reset(); }} />
+            onChange={setVelocitySafe} />
           <Slider label="Angle" value={angle} min={0} max={90}
-            onChange={(v: number) => { setAngle(v); reset(); }} />
+            onChange={setAngleSafe} />
         </div>
 
         <div className="flex justify-between">

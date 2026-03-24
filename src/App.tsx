@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/authStore';
 // Route Guards
 import ProtectedRoute from '@/components/ProtectedRoute';
 import PublicRoute from '@/components/PublicRoute';
+import RequireAuth from '@/components/RequireAuth';
 
 // Public Pages
 import Landing from '@/pages/Landing';
@@ -18,6 +19,8 @@ import Onboarding from '@/pages/Onboarding';
 import Home from '@/pages/Home';
 import Dashboard from '@/pages/Dashboard';
 import { ChapterPage } from '@/pages/ChapterPage';
+import ChemistryPage from '@/pages/ChemistryPage';
+import ChemistryChapterPage from '@/pages/ChemistryChapterPage';
 import ExamSelect from '@/pages/practice/ExamSelect';
 import SubjectSelect from '@/pages/practice/SubjectSelect';
 import ChapterList from '@/pages/practice/ChapterList';
@@ -59,13 +62,19 @@ function AppContent() {
           </Route>
 
         {/* Onboarding — auth required but no profile check */}
-        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/onboarding" element={
+          <RequireAuth fallback="/auth">
+            <Onboarding />
+          </RequireAuth>
+        } />
 
         {/* Protected routes — auth + profile required */}
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
           <Route path="/learn" element={<Dashboard />} />
           <Route path="/learn/:chapterId" element={<ChapterPage />} />
+          <Route path="/chemistry" element={<ChemistryPage />} />
+          <Route path="/chemistry/:chapterId" element={<ChemistryChapterPage />} />
           <Route path="/practice" element={<ExamSelect />} />
           <Route path="/practice/:exam/subject" element={<SubjectSelect />} />
           <Route path="/practice/:exam/:subject/chapters" element={<ChapterList />} />

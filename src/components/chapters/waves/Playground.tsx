@@ -1,3 +1,4 @@
+import { clampPhysics, PHYSICS_LIMITS } from '@/lib/physicsValidation';
 import React, { useState, useEffect, useRef } from 'react';
 
 type WaveMode = 'single' | 'superposition' | 'standing' | 'beats' | 'doppler' | 'harmonics';

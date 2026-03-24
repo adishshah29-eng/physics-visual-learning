@@ -1,3 +1,4 @@
+import { clampPhysics, PHYSICS_LIMITS } from '@/lib/physicsValidation';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 const R_GAS = 8.314;
@@ -415,7 +416,22 @@ function NumberInput({ label, unit, value, onChange }: { label: string; unit: st
   const [display, setDisplay] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value; setDisplay(raw);
-    const p = parseFloat(raw); if (!isNaN(p) && p > 0) onChange(p);
+    const p = parseFloat(raw);
+    let limits = PHYSICS_LIMITS.velocity || { min: -1e6, max: 1e6, fallback: 0, label };
+    const l = label.toLowerCase();
+    if (l.includes('mass')) limits = PHYSICS_LIMITS.mass;
+    else if (l.includes('radius') || l.includes('amplitude') || l.includes('length') || l.includes('height')) limits = PHYSICS_LIMITS.radius;
+    else if (l.includes('speed') || l.includes('velocity')) limits = PHYSICS_LIMITS.velocity;
+    else if (l.includes('angle')) limits = PHYSICS_LIMITS.angle;
+    else if (l.includes('gravity')) limits = PHYSICS_LIMITS.gravity;
+    else if (l.includes('friction') || l.includes('mu') || l.includes('coeff')) limits = PHYSICS_LIMITS.mu || { min: 0, max: 1, fallback: 0.3, label };
+    else if (l.includes('spring') || l.includes('constant')) limits = PHYSICS_LIMITS.springK || { min: 0.1, max: 1000, fallback: 10, label };
+    else if (l.includes('force')) limits = PHYSICS_LIMITS.force || { min: -1000, max: 1000, fallback: 0, label };
+    else if (l.includes('pressure')) limits = { min: 0.1, max: 1000000, fallback: 101325, label };
+    else if (l.includes('volume')) limits = { min: 0.001, max: 1000, fallback: 1, label };
+    else if (l.includes('temperature')) limits = PHYSICS_LIMITS.temperature || { min: 1, max: 10000, fallback: 300, label };
+    else if (l.includes('freq')) limits = { min: 0.1, max: 20000, fallback: 440, label };
+    if (!isNaN(p) && limits) onChange(clampPhysics(p, limits));
   };
   const handleBlur = () => { const p = parseFloat(display); if (isNaN(p) || p <= 0) setDisplay(''); };
   return (
