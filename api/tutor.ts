@@ -63,7 +63,8 @@ If off-topic, redirect to physics.`,
 export default async function handler(req: Request) {
   // CORS check
   const origin = req.headers.get('origin') ?? '';
-  if (!ALLOWED_ORIGINS.includes(origin)) {
+  const isAllowed = ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.vercel.app');
+  if (!isAllowed && origin !== '') {
     return new Response('Forbidden', { status: 403 });
   }
 
@@ -102,7 +103,7 @@ export default async function handler(req: Request) {
     );
   }
 
-  const geminiKey = process.env.GEMINI_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   if (!geminiKey) {
     return new Response(
       JSON.stringify({ error: 'Service unavailable' }),
@@ -112,7 +113,7 @@ export default async function handler(req: Request) {
 
   try {
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${geminiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
