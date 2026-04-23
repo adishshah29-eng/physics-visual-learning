@@ -7,6 +7,7 @@ import { getReadinessPercentage, predictJEEScore } from '@/services/ml/performan
 import { getDueItems } from '@/services/ml/spacedRepetition';
 import { supabase, type KnowledgeState, type ReviewQueueItem } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
+import UpgradeBanner from '@/components/UpgradeBanner';
 
 const Home: React.FC = () => {
   const { profile, user } = useAuthStore();
@@ -110,7 +111,7 @@ const Home: React.FC = () => {
 
       <main className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
         {/* Greeting */}
-        <div className="mb-10">
+        <div className="mb-6">
           <h1 className="text-3xl sm:text-4xl font-display tracking-wide text-white mb-2">
             {getGreeting()}, {profile?.name?.split(' ')[0] || 'Student'} 👋
           </h1>
@@ -121,6 +122,9 @@ const Home: React.FC = () => {
             </p>
           )}
         </div>
+
+        {/* Upgrade banner for free post-trial users */}
+        <UpgradeBanner />
 
         {/* Main Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">

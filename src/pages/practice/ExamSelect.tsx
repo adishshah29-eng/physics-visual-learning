@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, Loader2 } from 'lucide-react';
+import { ChevronRight, Loader2, Lock } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { supabase } from '@/lib/supabase';
 import { getKnowledgeState } from '@/lib/supabase-helpers';
 import Navbar from '@/components/Navbar';
+import { useSubscription } from '@/hooks/useSubscription';
+import ProBadge from '@/components/ProBadge';
 
 interface ExamInfo {
   id: string;
@@ -19,6 +21,7 @@ interface ExamInfo {
 const ExamSelect: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const { canAccessExam, openPaywall } = useSubscription();
   const [exams, setExams] = useState<ExamInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,21 +30,19 @@ const ExamSelect: React.FC = () => {
       setIsLoading(true);
       try {
         const examDefs = [
-          { id: 'jee-main', label: 'JEE Main', fullName: 'Joint Entrance Examination (Main)', subjects: 'Physics, Chemistry, Maths', color: 'sky' },
-          { id: 'jee-advanced', label: 'JEE Advanced', fullName: 'Joint Entrance Examination (Advanced)', subjects: 'Physics, Chemistry, Maths', color: 'violet' },
-          { id: 'mht-cet', label: 'MHT CET', fullName: 'Maharashtra Common Entrance Test', subjects: 'Physics, Chemistry, Maths', color: 'emerald' },
+          { id: 'jee-main',      label: 'JEE Main',     fullName: 'Joint Entrance Examination (Main)',     subjects: 'Physics, Chemistry, Maths', color: 'sky' },
+          { id: 'jee-advanced',  label: 'JEE Advanced',  fullName: 'Joint Entrance Examination (Advanced)', subjects: 'Physics, Chemistry, Maths', color: 'violet' },
+          { id: 'mht-cet',       label: 'MHT CET',       fullName: 'Maharashtra Common Entrance Test',       subjects: 'Physics, Chemistry, Maths', color: 'emerald' },
         ];
 
         const results: ExamInfo[] = [];
 
         for (const exam of examDefs) {
-          // Get question count
           const { count } = await supabase
             .from('questions')
             .select('*', { count: 'exact', head: true })
             .eq('exam', exam.id);
 
-          // Get user accuracy
           let accuracy = 0;
           if (user) {
             const ks = await getKnowledgeState(user.id);
@@ -53,11 +54,7 @@ const ExamSelect: React.FC = () => {
             }
           }
 
-          results.push({
-            ...exam,
-            questionCount: count || 0,
-            accuracy,
-          });
+          results.push({ ...exam, questionCount: count || 0, accuracy });
         }
 
         setExams(results);
@@ -98,18 +95,42 @@ const ExamSelect: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {exams.map((exam) => {
             const colors = getColorClasses(exam.color);
+            const accessible = canAccessExam(exam.id as any);
+            const isLocked = !accessible;
+
             return (
               <button
                 key={exam.id}
-                onClick={() => navigate(`/practice/${exam.id}/subject`)}
-                className={`glass-panel rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group relative overflow-hidden`}
+                onClick={() => {
+                  if (isLocked) {
+                    openPaywall(exam.id === 'jee-advanced' ? 'jee-advanced' : 'mht-cet');
+                  } else {
+                    navigate(`/practice/${exam.id}/subject`);
+                  }
+                }}
+                className={`glass-panel rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group relative overflow-hidden
+                  ${isLocked ? 'opacity-80 cursor-pointer' : ''}`}
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.icon}`}>
+                {/* Lock badge */}
+                {isLocked && (
+                  <div className="absolute top-3 right-3 flex items-center gap-1">
+                    <ProBadge size="sm" />
+                  </div>
+                )}
+
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.icon} relative`}>
                   <span className="text-xl font-bold">{exam.label.charAt(0)}</span>
+                  {isLocked && (
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center border border-slate-700">
+                      <Lock className="w-3 h-3 text-slate-400" />
+                    </div>
+                  )}
                 </div>
+
                 <h3 className="text-xl font-display tracking-wide mb-1">{exam.label}</h3>
                 <p className="text-slate-400 text-xs mb-4">{exam.fullName}</p>
                 <p className="text-slate-500 text-xs mb-1">{exam.subjects}</p>
+
                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-800/50">
                   <span className="text-xs text-slate-500 font-mono">
                     {exam.questionCount > 0 ? `${exam.questionCount} questions` : 'Questions loading...'}
@@ -120,9 +141,16 @@ const ExamSelect: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <div className={`flex items-center mt-3 text-sm font-medium ${colors.text} group-hover:gap-2 transition-all`}>
-                  Select <ChevronRight className="w-4 h-4 ml-1" />
-                </div>
+
+                {isLocked ? (
+                  <div className="flex items-center mt-3 text-sm font-medium text-violet-400 gap-1">
+                    <Lock className="w-3.5 h-3.5" /> Unlock with Pro
+                  </div>
+                ) : (
+                  <div className={`flex items-center mt-3 text-sm font-medium ${colors.text} group-hover:gap-2 transition-all`}>
+                    Select <ChevronRight className="w-4 h-4 ml-1" />
+                  </div>
+                )}
               </button>
             );
           })}

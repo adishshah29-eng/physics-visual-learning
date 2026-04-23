@@ -14,6 +14,7 @@ import {
 import { getMasteryBgColor } from '@/services/ml/knowledgeTracing';
 import { supabase, type KnowledgeState } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
+import PaywallGuard from '@/components/PaywallGuard';
 
 interface DailyData {
   date: string;
@@ -229,26 +230,28 @@ const Analytics: React.FC = () => {
               <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 Performance Over Time (Last 14 Days)
               </h2>
-              <div className="glass-panel rounded-xl p-6">
-                {dailyData.some(d => d.attempted > 0) ? (
-                  <ResponsiveContainer width="100%" height={280}>
-                    <LineChart data={dailyData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 10 }} interval="preserveStartEnd" />
-                      <YAxis tick={{ fill: '#64748b', fontSize: 10 }} width={30} />
-                      <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#e2e8f0' }}
-                      />
-                      <Line type="monotone" dataKey="attempted" stroke="#38bdf8" strokeWidth={2} dot={false} name="Attempted" />
-                      <Line type="monotone" dataKey="correct" stroke="#34d399" strokeWidth={2} dot={false} name="Correct" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div className="h-[280px] flex items-center justify-center text-slate-500 text-sm">
-                    No data yet — start practicing to see your trends.
-                  </div>
-                )}
-              </div>
+              <PaywallGuard feature="full-analytics" variant="blur" lockLabel="Full Analytics is Pro">
+                <div className="glass-panel rounded-xl p-6">
+                  {dailyData.some(d => d.attempted > 0) ? (
+                    <ResponsiveContainer width="100%" height={280}>
+                      <LineChart data={dailyData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                        <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 10 }} interval="preserveStartEnd" />
+                        <YAxis tick={{ fill: '#64748b', fontSize: 10 }} width={30} />
+                        <Tooltip
+                          contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#e2e8f0' }}
+                        />
+                        <Line type="monotone" dataKey="attempted" stroke="#38bdf8" strokeWidth={2} dot={false} name="Attempted" />
+                        <Line type="monotone" dataKey="correct" stroke="#34d399" strokeWidth={2} dot={false} name="Correct" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-[280px] flex items-center justify-center text-slate-500 text-sm">
+                      No data yet — start practicing to see your trends.
+                    </div>
+                  )}
+                </div>
+              </PaywallGuard>
             </section>
 
             {/* Section 3: Subject Performance */}
@@ -428,29 +431,31 @@ const Analytics: React.FC = () => {
               <h2 className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 mb-4">
                 ML Insights
               </h2>
-              <div className="glass-panel rounded-xl p-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-sky-950/20 pointer-events-none" />
-                <p className="text-slate-400 text-sm mb-6 relative">Based on your performance:</p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 relative">
-                  <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
-                    <div className="text-2xl font-mono font-bold text-sky-400">{predictedScore}</div>
-                    <div className="text-xs text-slate-500">Predicted Score</div>
+              <PaywallGuard feature="full-analytics" variant="blur" lockLabel="ML Insights are Pro">
+                <div className="glass-panel rounded-xl p-6 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent to-sky-950/20 pointer-events-none" />
+                  <p className="text-slate-400 text-sm mb-6 relative">Based on your performance:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 relative">
+                    <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
+                      <div className="text-2xl font-mono font-bold text-sky-400">{predictedScore}</div>
+                      <div className="text-xs text-slate-500">Predicted Score</div>
+                    </div>
+                    <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
+                      <div className="text-2xl font-mono font-bold text-emerald-400">{readiness}%</div>
+                      <div className="text-xs text-slate-500">Readiness</div>
+                    </div>
+                    <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
+                      <div className="text-2xl font-mono font-bold text-violet-400">{weakChapters.length}</div>
+                      <div className="text-xs text-slate-500">Areas to Improve</div>
+                    </div>
                   </div>
-                  <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
-                    <div className="text-2xl font-mono font-bold text-emerald-400">{readiness}%</div>
-                    <div className="text-xs text-slate-500">Readiness</div>
-                  </div>
-                  <div className="glass-panel bg-slate-900/40 rounded-lg p-4 text-center border-none">
-                    <div className="text-2xl font-mono font-bold text-violet-400">{weakChapters.length}</div>
-                    <div className="text-xs text-slate-500">Areas to Improve</div>
+                  <div className="bg-slate-900/40 rounded-lg p-4 border border-slate-800/50 backdrop-blur-md relative">
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      💡 {recommendation}
+                    </p>
                   </div>
                 </div>
-                <div className="bg-slate-900/40 rounded-lg p-4 border border-slate-800/50 backdrop-blur-md relative">
-                  <p className="text-sm text-slate-300 leading-relaxed">
-                    💡 {recommendation}
-                  </p>
-                </div>
-              </div>
+              </PaywallGuard>
             </section>
           </>
         )}

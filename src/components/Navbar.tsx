@@ -1,27 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Atom, ArrowLeft, Flame, ChevronDown, LogOut, User, Settings, Shield } from 'lucide-react';
+import { Atom, ArrowLeft, Flame, ChevronDown, LogOut, User, Settings, Shield, Sparkles } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
+import { useSubscription } from '@/hooks/useSubscription';
+import ProBadge from '@/components/ProBadge';
 
 interface NavbarProps {
   currentChapter?: string;
 }
 
 const appNavLinks = [
-  { path: '/home', label: 'Home' },
-  { path: '/practice', label: 'Practice' },
-  { path: '/analytics', label: 'Analytics' },
-  { path: '/leaderboard', label: 'Leaderboard' },
-  { path: '/learn', label: 'Simulations' },
-  { path: '/chemistry', label: 'Chemistry' },
+  { path: '/home',        label: 'Home',        locked: false },
+  { path: '/practice',   label: 'Practice',     locked: false },
+  { path: '/analytics',  label: 'Analytics',    locked: true  },
+  { path: '/leaderboard',label: 'Leaderboard',  locked: false },
+  { path: '/learn',      label: 'Simulations',  locked: false },
+  { path: '/chemistry',  label: 'Chemistry',    locked: true  },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, profile, signOut } = useAuthStore();
+  const { isPro, isTrialing, openPaywall } = useSubscription();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const isFreeRestricted = !isPro && !isTrialing;
 
   const isPublicRoute = location.pathname === '/' || location.pathname === '/auth';
   const isChapterPage = location.pathname.startsWith('/learn/');
@@ -107,16 +112,18 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
           <div className="hidden md:flex items-center gap-1">
             {appNavLinks.map((link) => {
               const isActive = location.pathname === link.path || location.pathname.startsWith(link.path + '/');
+              const showLock = link.locked && isFreeRestricted;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`relative px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     isActive ? 'text-sky-400 bg-sky-500/10' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
                 >
                   {link.label}
-                  {isActive && <div className="h-0.5 bg-sky-400 mt-0.5 rounded-full" />}
+                  {showLock && <ProBadge size="sm" />}
+                  {isActive && <div className="h-0.5 bg-sky-400 mt-0.5 rounded-full absolute bottom-0 left-3 right-3" />}
                 </Link>
               );
             })}
@@ -124,10 +131,31 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
+            {/* Upgrade CTA for free post-trial users */}
+            {isFreeRestricted && (
+              <button
+                onClick={() => openPaywall('navbar')}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
+                  bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500
+                  text-white transition-all hover:scale-105 shadow-md shadow-violet-500/20"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Upgrade
+              </button>
+            )}
+
+            {/* Pro badge for pro users */}
+            {isPro && !isTrialing && (
+              <ProBadge size="md" />
+            )}
+
+            {/* Streak */}
             <div className="flex items-center gap-1 text-sm">
               <Flame className="w-4 h-4 text-orange-400" />
               <span className="text-slate-300 font-medium">{streak}</span>
             </div>
+
+            {/* Avatar dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center text-xs font-semibold text-sky-400">
@@ -143,11 +171,26 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-xl overflow-hidden z-50">
                   <div className="px-4 py-3 border-b border-slate-800">
-                    <p className="text-sm font-medium text-white truncate">{profile?.name || 'User'}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-white truncate">{profile?.name || 'User'}</p>
+                      {isPro && <ProBadge size="sm" />}
+                    </div>
                     <p className="text-xs text-slate-500 truncate">{profile?.email || ''}</p>
                   </div>
+
+                  {/* Upgrade row for free users */}
+                  {isFreeRestricted && (
+                    <button
+                      onClick={() => { setDropdownOpen(false); openPaywall('dropdown'); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-violet-300 hover:bg-violet-500/10 transition-colors border-b border-violet-500/10"
+                    >
+                      <Sparkles className="w-4 h-4 text-violet-400" />
+                      Upgrade to Pro
+                    </button>
+                  )}
+
                   <div className="py-1">
-                    {profile?.role === 'admin' && (
+                    {(profile as any)?.role === 'admin' && (
                       <Link to="/admin" onClick={() => setDropdownOpen(false)} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-sky-400 hover:bg-sky-500/10 transition-colors border-b border-sky-500/10">
                         <Shield className="w-4 h-4" /> Admin Portal
                       </Link>
@@ -172,21 +215,33 @@ const Navbar: React.FC<NavbarProps> = ({ currentChapter }) => {
 
         {/* Mobile Nav strip */}
         <div className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-sm w-full">
-          <div className="flex overflow-x-auto no-scrollbar px-4 gap-1 py-1 items-center">
+          <div className="flex overflow-x-auto no-scrollbar px-2 gap-1 py-1 items-center">
             {appNavLinks.map((link) => {
               const isActive = location.pathname === link.path || location.pathname.startsWith(link.path + '/');
+              const showLock = link.locked && isFreeRestricted;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors ${
+                  className={`px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors flex items-center gap-1 ${
                     isActive ? 'text-sky-400 border-b-2 border-sky-400' : 'text-slate-500'
                   }`}
                 >
                   {link.label}
+                  {showLock && <ProBadge size="sm" />}
                 </Link>
               );
             })}
+            {isFreeRestricted && (
+              <button
+                onClick={() => openPaywall('mobile-nav')}
+                className="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-bold
+                  bg-gradient-to-r from-violet-600 to-indigo-600 text-white shrink-0"
+              >
+                <Sparkles className="w-2.5 h-2.5" />
+                PRO
+              </button>
+            )}
           </div>
         </div>
       </nav>

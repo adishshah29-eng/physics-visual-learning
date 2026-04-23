@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { supabase, type Profile, type ProfileUpdate } from '@/lib/supabase';
 import { getProfile, upsertProfile } from '@/lib/supabase-helpers';
 import type { User } from '@supabase/supabase-js';
+import { useSubscriptionStore } from './subscriptionStore';
 
 interface AuthState {
   user: User | null;
@@ -46,6 +47,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           isLoading: false,
         });
 
+        // Init subscription (uses profile.plan for fast render)
+        if (profile) {
+          const profileAny = profile as any;
+          useSubscriptionStore.getState().initSubscription(
+            session.user.id,
+            profileAny.plan ?? 'free'
+          );
+        }
+
         // Update last_seen
         if (profile) {
           await upsertProfile({ id: session.user.id, last_seen: new Date().toISOString() });
@@ -64,6 +74,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             isAuthenticated: true,
             isLoading: false,
           });
+          // Init subscription on sign-in
+          if (profile) {
+            const profileAny = profile as any;
+            useSubscriptionStore.getState().initSubscription(
+              session.user.id,
+              profileAny.plan ?? 'free'
+            );
+          }
         } else if (event === 'SIGNED_OUT') {
           set({
             user: null,

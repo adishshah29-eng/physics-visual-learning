@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ChevronRight, Loader2 } from 'lucide-react';
+import { ChevronRight, Loader2, Lock } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { getKnowledgeState } from '@/lib/supabase-helpers';
 import Navbar from '@/components/Navbar';
+import { useSubscription } from '@/hooks/useSubscription';
+import ProBadge from '@/components/ProBadge';
 
 interface SubjectInfo {
   id: string;
@@ -103,6 +105,7 @@ const SubjectSelect: React.FC = () => {
   const { exam } = useParams<{ exam: string }>();
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const { canAccessSubject, openPaywall } = useSubscription();
   const [subjects, setSubjects] = useState<SubjectInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -173,15 +176,38 @@ const SubjectSelect: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {subjects.map((sub) => {
             const colors = getColorClasses(sub.color);
+            const accessible = canAccessSubject(sub.id as any);
+            const isLocked = !accessible;
+
             return (
               <button
                 key={sub.id}
-                onClick={() => navigate(`/practice/${exam}/${sub.id}/chapters`)}
-                className={`glass-panel rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group relative overflow-hidden`}
+                onClick={() => {
+                  if (isLocked) {
+                    openPaywall(sub.id as 'chemistry' | 'maths');
+                  } else {
+                    navigate(`/practice/${exam}/${sub.id}/chapters`);
+                  }
+                }}
+                className={`glass-panel rounded-xl p-6 text-left transition-all duration-300 ${colors.border} group relative overflow-hidden
+                  ${isLocked ? 'opacity-80' : ''}`}
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg}`}>
+                {/* Lock badge */}
+                {isLocked && (
+                  <div className="absolute top-3 right-3">
+                    <ProBadge size="sm" />
+                  </div>
+                )}
+
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg} relative`}>
                   <span className="text-2xl">{sub.icon}</span>
+                  {isLocked && (
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center border border-slate-700">
+                      <Lock className="w-3 h-3 text-slate-400" />
+                    </div>
+                  )}
                 </div>
+
                 <h3 className="text-xl font-display tracking-wide mb-1">{sub.label}</h3>
                 <p className="text-slate-500 text-xs mb-4 font-mono uppercase tracking-wider">
                   {sub.chapterCount} chapters
@@ -201,9 +227,15 @@ const SubjectSelect: React.FC = () => {
                   </div>
                 </div>
 
-                <div className={`flex items-center mt-4 text-sm font-medium ${colors.text} group-hover:gap-2 transition-all`}>
-                  Practice <ChevronRight className="w-4 h-4 ml-1" />
-                </div>
+                {isLocked ? (
+                  <div className="flex items-center mt-4 text-sm font-medium text-violet-400 gap-1">
+                    <Lock className="w-3.5 h-3.5" /> Unlock with Pro
+                  </div>
+                ) : (
+                  <div className={`flex items-center mt-4 text-sm font-medium ${colors.text} group-hover:gap-2 transition-all`}>
+                    Practice <ChevronRight className="w-4 h-4 ml-1" />
+                  </div>
+                )}
               </button>
             );
           })}

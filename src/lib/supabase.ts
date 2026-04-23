@@ -15,6 +15,7 @@ export interface Database {
           avatar_url: string | null;
           role: string;
           streak_days: number;
+          plan: 'free' | 'pro';
           created_at: string;
           last_seen: string;
         };
@@ -27,6 +28,7 @@ export interface Database {
           avatar_url?: string | null;
           role?: string;
           streak_days?: number;
+          plan?: 'free' | 'pro';
           created_at?: string;
           last_seen?: string;
         };
@@ -39,8 +41,50 @@ export interface Database {
           avatar_url?: string | null;
           role?: string;
           streak_days?: number;
+          plan?: 'free' | 'pro';
           created_at?: string;
           last_seen?: string;
+        };
+      };
+      subscriptions: {
+        Row: {
+          id: string;
+          user_id: string;
+          plan: 'free' | 'pro';
+          status: 'active' | 'cancelled' | 'expired' | 'trialing';
+          razorpay_subscription_id: string | null;
+          razorpay_payment_id: string | null;
+          current_period_start: string | null;
+          current_period_end: string | null;
+          trial_end: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          plan?: 'free' | 'pro';
+          status?: 'active' | 'cancelled' | 'expired' | 'trialing';
+          razorpay_subscription_id?: string | null;
+          razorpay_payment_id?: string | null;
+          current_period_start?: string | null;
+          current_period_end?: string | null;
+          trial_end?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          plan?: 'free' | 'pro';
+          status?: 'active' | 'cancelled' | 'expired' | 'trialing';
+          razorpay_subscription_id?: string | null;
+          razorpay_payment_id?: string | null;
+          current_period_start?: string | null;
+          current_period_end?: string | null;
+          trial_end?: string;
+          created_at?: string;
+          updated_at?: string;
         };
       };
       questions: {
@@ -298,3 +342,30 @@ export type TestSessionInsert = Database['public']['Tables']['test_sessions']['I
 
 export type LeaderboardScore = Database['public']['Tables']['leaderboard_scores']['Row'];
 export type LeaderboardScoreInsert = Database['public']['Tables']['leaderboard_scores']['Insert'];
+
+export type Subscription = Database['public']['Tables']['subscriptions']['Row'];
+export type SubscriptionInsert = Database['public']['Tables']['subscriptions']['Insert'];
+export type SubscriptionUpdate = Database['public']['Tables']['subscriptions']['Update'];
+
+// Feature gate union — strict type for all gated features
+export type FeatureGate =
+  | 'chemistry'
+  | 'maths'
+  | 'jee-advanced'
+  | 'mht-cet'
+  | 'ai-tutor'
+  | 'session-mode'
+  | 'bookmarks'
+  | 'spaced-repetition'
+  | 'full-analytics';
+
+export type PricingPlan = 'monthly' | 'quarterly' | 'annual';
+
+export const PRICING = {
+  monthly:   { amount: 19900, label: '₹199/mo',         perMonth: 199,  tag: null },
+  quarterly: { amount: 44900, label: '₹449/qtr',        perMonth: 150,  tag: 'Best Value' },
+  annual:    { amount: 99900, label: '₹999/yr',         perMonth: 83,   tag: 'Save ₹1,389' },
+} as const;
+
+export const FREE_DAILY_LIMIT = 5;
+export const TRIAL_DAYS = 10;

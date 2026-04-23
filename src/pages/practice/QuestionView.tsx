@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate, useParams, Link, useSearchParams } from 'react-router-dom';
-import { X, Clock, ChevronRight, ChevronLeft, Loader2, CheckCircle2, XCircle, Bookmark, LayoutGrid } from 'lucide-react';
+import { X, Clock, ChevronRight, ChevronLeft, Loader2, CheckCircle2, XCircle, Bookmark, LayoutGrid, Lock, Sparkles } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { usePracticeStore } from '@/store/practiceStore';
 import { supabase, type Question, type Attempt } from '@/lib/supabase';
 import { saveAttempt, updateKnowledgeState, getAttemptsByUser } from '@/lib/supabase-helpers';
 import Navbar from '@/components/Navbar';
 import MathRenderer from '@/components/ui/MathRenderer';
+import { useSubscription } from '@/hooks/useSubscription';
 
 const QuestionView: React.FC = () => {
   const { exam, subject, chapter } = useParams<{ exam: string; subject: string; chapter: string }>();
@@ -23,6 +24,8 @@ const QuestionView: React.FC = () => {
     sessionQuestions, currentQuestion, currentQuestionIndex, sessionAttempts,
     startSession, submitAnswer, nextQuestion, previousQuestion, setQuestionIndex, setSessionAttempts
   } = usePracticeStore();
+  const { isPro, isTrialing, recordQuestion, openPaywall, dailyQuestionsLeft } = useSubscription();
+  const isFreeRestricted = !isPro && !isTrialing;
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -30,6 +33,7 @@ const QuestionView: React.FC = () => {
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [elapsedTime, setElapsedTime] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
+  const [showLimitInterstitial, setShowLimitInterstitial] = useState(false);
 
   // Load questions
   useEffect(() => {
@@ -151,7 +155,16 @@ const QuestionView: React.FC = () => {
         await updateKnowledgeState(user.id, subject, chapter, isCorrect);
       }
     }
-  }, [isAnswered, currentQuestion, questionStartTime, submitAnswer, user, subject, chapter]);
+
+    // Track daily usage for free users & show interstitial if limit hit
+    if (isFreeRestricted) {
+      const stillOk = recordQuestion();
+      if (!stillOk) {
+        // Show interstitial after a brief delay so result is visible
+        setTimeout(() => setShowLimitInterstitial(true), 800);
+      }
+    }
+  }, [isAnswered, currentQuestion, questionStartTime, submitAnswer, user, subject, chapter, isFreeRestricted, recordQuestion]);
 
   const handleNext = () => {
     if (currentQuestionIndex >= sessionQuestions.length - 1) {
@@ -283,6 +296,36 @@ const QuestionView: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       <Navbar />
       <div className="pt-28 md:pt-24 pb-16 px-4 sm:px-6 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 flex-1">
+
+        {/* Daily Limit Interstitial */}
+        {showLimitInterstitial && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+            <div className="relative w-full max-w-sm bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-700/60 rounded-2xl p-8 text-center shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-violet-500/10 blur-3xl pointer-events-none" />
+              <div className="w-16 h-16 bg-violet-500/15 border border-violet-500/30 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                <Lock className="w-8 h-8 text-violet-400" />
+              </div>
+              <h3 className="text-xl font-display text-white mb-2">Daily Limit Reached</h3>
+              <p className="text-slate-400 text-sm mb-6">
+                Free plan includes 5 questions per day. Upgrade for unlimited access.
+              </p>
+              <button
+                onClick={() => { setShowLimitInterstitial(false); openPaywall('session-mode'); }}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500
+                  text-white font-bold py-3 rounded-xl transition-all mb-3 shadow-lg shadow-violet-500/20"
+              >
+                <Sparkles className="w-4 h-4" />
+                Go Pro — Unlimited
+              </button>
+              <button
+                onClick={() => navigate('/home')}
+                className="w-full text-sm text-slate-400 hover:text-white py-2 transition-colors"
+              >
+                Come Back Tomorrow
+              </button>
+            </div>
+          </div>
+        )}
         
         {/* Main Content Area */}
         <div className="flex-1 max-w-3xl w-full mx-auto flex flex-col">

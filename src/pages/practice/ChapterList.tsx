@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Search, ChevronRight, Loader2, X, Clock, BookOpen } from 'lucide-react';
+import { Search, ChevronRight, Loader2, X, Clock, BookOpen, Lock, Sparkles } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { getKnowledgeState } from '@/lib/supabase-helpers';
 import { getMasteryLabel, getMasteryBgColor } from '@/services/ml/knowledgeTracing';
 import { supabase, type KnowledgeState } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
+import { useSubscription } from '@/hooks/useSubscription';
 
 interface ChapterInfo {
   name: string;
@@ -116,6 +117,9 @@ const ChapterList: React.FC = () => {
   const { exam, subject } = useParams<{ exam: string; subject: string }>();
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const { isPro, isTrialing, openPaywall } = useSubscription();
+  const isFreeRestricted = !isPro && !isTrialing;
+  const FREE_CHAPTER_LIMIT = 3;
 
   const [chapters, setChapters] = useState<ChapterInfo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -248,42 +252,69 @@ const ChapterList: React.FC = () => {
         </div>
 
         {/* Chapter List */}
-        <div className="space-y-3">
-          {filteredChapters.map((chapter) => {
+        <div className="space-y-3 pb-20">
+          {filteredChapters.map((chapter, idx) => {
             const label = getMasteryLabel(chapter.mastery);
             const barColor = getMasteryBgColor(chapter.mastery);
+            // Free users can only access first 3 chapters (in Physics)
+            const isLocked = isFreeRestricted && subject === 'physics' && idx >= FREE_CHAPTER_LIMIT;
 
             return (
               <button
                 key={chapter.slug}
-                onClick={() => navigate(`/practice/${exam}/${subject}/${chapter.slug}/list`)}
-                className="w-full glass-panel hover:bg-slate-800/20 rounded-xl p-4 text-left hover:border-sky-500/30 transition-all flex items-center gap-4 group"
+                onClick={() => {
+                  if (isLocked) {
+                    openPaywall('chemistry'); // generic pro gate
+                  } else {
+                    navigate(`/practice/${exam}/${subject}/${chapter.slug}/list`);
+                  }
+                }}
+                className={`w-full glass-panel rounded-xl p-4 text-left transition-all flex items-center gap-4 group relative overflow-hidden
+                  ${isLocked ? 'opacity-70' : 'hover:bg-slate-800/20 hover:border-sky-500/30'}`}
               >
-                 <div className="flex-1 min-w-0">
+                {/* Lock overlay for restricted chapters */}
+                {isLocked && (
+                  <div className="absolute inset-0 flex items-center justify-end pr-4 pointer-events-none">
+                    <Lock className="w-4 h-4 text-slate-600" />
+                  </div>
+                )}
+
+                <div className="flex-1 min-w-0">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
                     <h3 className="text-lg font-display tracking-wide text-white truncate">{chapter.name}</h3>
-                    <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                      label === 'Beginner' ? 'bg-red-500/10 text-red-400' :
-                      label === 'Developing' ? 'bg-orange-500/10 text-orange-400' :
-                      label === 'Proficient' ? 'bg-amber-500/10 text-amber-400' :
-                      'bg-emerald-500/10 text-emerald-400'
-                    }`}>
-                      {label}
-                    </span>
+                    {!isLocked && (
+                      <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                        label === 'Beginner'   ? 'bg-red-500/10 text-red-400' :
+                        label === 'Developing' ? 'bg-orange-500/10 text-orange-400' :
+                        label === 'Proficient' ? 'bg-amber-500/10 text-amber-400' :
+                        'bg-emerald-500/10 text-emerald-400'
+                      }`}>
+                        {label}
+                      </span>
+                    )}
+                    {isLocked && (
+                      <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-400 border border-violet-500/30">
+                        PRO
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-4 text-xs text-slate-500 font-mono">
                     <span>{chapter.questionCount} questions</span>
-                    <span>{Math.round(chapter.mastery * 100)}% mastery</span>
+                    {!isLocked && <span>{Math.round(chapter.mastery * 100)}% mastery</span>}
                   </div>
                   {/* Mastery bar */}
-                  <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${barColor}`}
-                      style={{ width: `${Math.max(2, chapter.mastery * 100)}%` }}
-                    />
-                  </div>
+                  {!isLocked && (
+                    <div className="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                        style={{ width: `${Math.max(2, chapter.mastery * 100)}%` }}
+                      />
+                    </div>
+                  )}
                 </div>
-                <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors shrink-0" />
+                {!isLocked && (
+                  <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors shrink-0" />
+                )}
               </button>
             );
           })}
@@ -294,6 +325,27 @@ const ChapterList: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Sticky Go Pro bar for free users */}
+        {isFreeRestricted && subject === 'physics' && filteredChapters.length > FREE_CHAPTER_LIMIT && (
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-violet-900/95 via-indigo-900/95 to-violet-900/95 border-t border-violet-500/30 backdrop-blur-md">
+            <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-sm">
+                <Lock className="w-4 h-4 text-violet-400 shrink-0" />
+                <span className="text-slate-200">
+                  <span className="font-semibold text-white">{filteredChapters.length - FREE_CHAPTER_LIMIT} more chapters</span> locked — unlock with Pro
+                </span>
+              </div>
+              <button
+                onClick={() => openPaywall('chemistry')}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-violet-500 hover:bg-violet-400 text-white transition-all hover:scale-105 shrink-0"
+              >
+                <Sparkles className="w-4 h-4" />
+                Go Pro
+              </button>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

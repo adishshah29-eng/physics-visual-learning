@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { Settings as SettingsIcon, Bell, Moon, Shield, Volume2, LogOut, Paintbrush, Sparkles } from 'lucide-react';
+import { Settings as SettingsIcon, Bell, Moon, Shield, Volume2, LogOut, Paintbrush, Sparkles, CreditCard, CheckCircle, Clock, Lock } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigate } from 'react-router-dom';
+import { useSubscription } from '@/hooks/useSubscription';
+import ProBadge from '@/components/ProBadge';
 
 const Settings: React.FC = () => {
   const { signOut, profile } = useAuthStore();
   const navigate = useNavigate();
+  const { isPro, isTrialing, trialDaysLeft, trialEndDate, renewalDate, openPaywall, isFreeRestricted } = useSubscription();
+  const [cancelConfirm, setCancelConfirm] = useState(false);
   
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
@@ -32,6 +36,101 @@ const Settings: React.FC = () => {
         </div>
 
         <div className="space-y-6">
+          {/* ─── Subscription Section ─────────────────────────── */}
+          <section className="glass-panel p-6 rounded-2xl relative overflow-hidden border border-violet-500/20">
+            <div className="absolute top-0 right-0 w-48 h-32 bg-violet-500/5 rounded-full blur-3xl pointer-events-none" />
+            <h2 className="text-base font-display text-violet-400 tracking-wider uppercase mb-5 flex items-center gap-2">
+              <CreditCard className="w-4 h-4" /> Subscription
+            </h2>
+
+            {isPro && !isTrialing && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
+                    <CheckCircle className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-bold text-white">Physics.Lab Pro</p>
+                      <ProBadge size="sm" />
+                    </div>
+                    {renewalDate && (
+                      <p className="text-xs text-slate-400">Renews on {renewalDate}</p>
+                    )}
+                  </div>
+                </div>
+                {!cancelConfirm ? (
+                  <button
+                    onClick={() => setCancelConfirm(true)}
+                    className="text-xs text-slate-500 hover:text-red-400 transition-colors"
+                  >
+                    Cancel subscription
+                  </button>
+                ) : (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                    <p className="text-sm text-red-300 mb-3">
+                      You'll lose Pro access on {renewalDate}. Are you sure?
+                    </p>
+                    <div className="flex gap-2">
+                      <button className="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-1.5 rounded-lg transition-colors">
+                        Yes, Cancel
+                      </button>
+                      <button
+                        onClick={() => setCancelConfirm(false)}
+                        className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg transition-colors"
+                      >
+                        Keep Pro
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {isTrialing && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-sky-500/15 flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-sky-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Free Trial Active</p>
+                    <p className="text-xs text-sky-400 font-semibold">
+                      {trialDaysLeft} day{trialDaysLeft !== 1 ? 's' : ''} remaining{trialEndDate ? ` (ends ${trialEndDate})` : ''}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => openPaywall('settings')}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white transition-all hover:scale-105"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Upgrade to Pro
+                </button>
+              </div>
+            )}
+
+            {isFreeRestricted && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-slate-700/50 flex items-center justify-center">
+                    <Lock className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Free Plan</p>
+                    <p className="text-xs text-slate-400">5 questions/day · Physics only</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => openPaywall('settings')}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white transition-all hover:scale-105"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Upgrade to Pro — Start 10-day Trial
+                </button>
+              </div>
+            )}
+          </section>
           {/* Appearance */}
           <section className="glass-panel p-6 rounded-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/5 rounded-full blur-3xl"></div>

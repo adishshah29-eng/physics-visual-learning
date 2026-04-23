@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import Navbar from '@/components/Navbar';
-import { User, Mail, Shield, Calendar, Edit3, Award, Loader2, Check, X, BookOpen } from 'lucide-react';
+import { User, Mail, Shield, Calendar, Edit3, Award, Loader2, Check, X, BookOpen, Sparkles } from 'lucide-react';
 import { getAttemptsByUser } from '@/lib/supabase-helpers';
 import type { Attempt } from '@/lib/supabase';
+import { useSubscription } from '@/hooks/useSubscription';
+import ProBadge from '@/components/ProBadge';
 
 const Profile: React.FC = () => {
   const { profile, updateProfile } = useAuthStore();
+  const { isPro, isFreeRestricted, openPaywall } = useSubscription();
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(profile?.name || '');
   const [isUpdating, setIsUpdating] = useState(false);
@@ -80,6 +83,7 @@ const Profile: React.FC = () => {
             <div className="mb-2">
               <h1 className="text-3xl font-display tracking-wide text-white flex items-center gap-3">
                 {profile?.name || 'Student Name'}
+                {isPro && <ProBadge size="md" />}
                 {profileData?.role === 'admin' && (
                   <span className="bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs px-2 py-0.5 rounded-full font-mono flex items-center gap-1">
                     <Shield className="w-3 h-3" /> ADMIN
@@ -174,6 +178,29 @@ const Profile: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Upgrade card for free post-trial users */}
+            {isFreeRestricted && (
+              <div className="glass-panel p-5 rounded-2xl relative overflow-hidden border border-violet-500/20">
+                <div className="absolute top-0 right-0 w-32 h-24 bg-violet-500/8 blur-3xl pointer-events-none" />
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="w-10 h-10 bg-violet-500/15 rounded-xl flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-violet-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white mb-0.5">Upgrade to Pro</p>
+                    <p className="text-xs text-slate-400">Unlimited questions, all subjects & AI Tutor.</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => openPaywall('profile')}
+                  className="w-full text-sm font-bold py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white transition-all hover:scale-[1.02]"
+                >
+                  Start 10-day Free Trial
+                </button>
+                <p className="text-xs text-slate-500 text-center mt-2">No card required</p>
+              </div>
+            )}
           </div>
 
           {/* Right Column (Achievements / Activity Placeholder) */}

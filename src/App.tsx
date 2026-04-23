@@ -40,6 +40,8 @@ import UserDetailAnalytics from '@/pages/admin/UserDetailAnalytics';
 // Other
 import NotFound from '@/pages/NotFound';
 import Atmosphere from '@/components/Atmosphere';
+import PaywallModal from '@/components/PaywallModal';
+import TrialBanner from '@/components/TrialBanner';
 
 const queryClient = new QueryClient();
 
@@ -53,6 +55,8 @@ function AppContent() {
   return (
     <>
       <Atmosphere />
+      <PaywallModal />
+      <TrialBanner />
       <BrowserRouter>
         <Routes>
           {/* Public routes — redirect to /home if authenticated */}
