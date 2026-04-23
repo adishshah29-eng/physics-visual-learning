@@ -43,7 +43,7 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|sw.js|favicon.ico|logo192.png|manifest.json).*)",
       "destination": "/index.html"
     }
   ]
