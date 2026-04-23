@@ -1,6 +1,7 @@
 import { useSubscriptionStore } from '@/store/subscriptionStore';
 import type { FeatureGate } from '@/lib/supabase';
 import { FREE_DAILY_LIMIT } from '@/lib/supabase';
+import { useAuthStore } from '@/store/authStore';
 
 /**
  * Primary subscription hook. Use this everywhere in the UI — never access
@@ -24,15 +25,21 @@ export function useSubscription() {
     refreshSubscription,
   } = useSubscriptionStore();
 
-  // Free tier is active (trial expired, not pro)
-  const isFreeRestricted = !isPro && !isTrialing;
+  const { profile } = useAuthStore();
+  const isAdmin = profile?.role === 'admin';
+
+  // Override isPro for admins
+  const effectiveIsPro = isPro || isAdmin;
+
+  // Free tier is active (trial expired, not pro, not admin)
+  const isFreeRestricted = !effectiveIsPro && !isTrialing;
 
   /**
    * Returns true if the user can access the given subject.
    * During trial, all subjects are accessible.
    */
   function canAccessSubject(subject: 'physics' | 'chemistry' | 'maths'): boolean {
-    if (isPro || isTrialing) return true;
+    if (effectiveIsPro || isTrialing) return true;
     return subject === 'physics'; // free users only get physics
   }
 
@@ -41,7 +48,7 @@ export function useSubscription() {
    * During trial, all exams are accessible.
    */
   function canAccessExam(exam: 'jee-main' | 'jee-advanced' | 'mht-cet'): boolean {
-    if (isPro || isTrialing) return true;
+    if (effectiveIsPro || isTrialing) return true;
     return exam === 'jee-main'; // free users only get JEE Main
   }
 
@@ -49,7 +56,7 @@ export function useSubscription() {
    * Returns true if the user can access a gated feature.
    */
   function canAccessFeature(feature: FeatureGate): boolean {
-    if (isPro || isTrialing) return true;
+    if (effectiveIsPro || isTrialing) return true;
     return false;
   }
 
@@ -64,7 +71,7 @@ export function useSubscription() {
    * Call after each question answered on free tier.
    */
   function recordQuestion(): boolean {
-    if (isPro || isTrialing) return true; // no limit
+    if (effectiveIsPro || isTrialing) return true; // no limit
     const newCount = incrementUsage();
     return newCount <= FREE_DAILY_LIMIT;
   }
@@ -93,9 +100,10 @@ export function useSubscription() {
 
   return {
     // State
-    isPro,
+    isPro: effectiveIsPro,
     isTrialing,
     isFreeRestricted,
+    isAdmin,
     trialDaysLeft,
     plan,
     isLoading,

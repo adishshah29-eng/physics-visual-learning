@@ -9,7 +9,7 @@ import ProBadge from '@/components/ProBadge';
 const Settings: React.FC = () => {
   const { signOut, profile } = useAuthStore();
   const navigate = useNavigate();
-  const { isPro, isTrialing, trialDaysLeft, trialEndDate, renewalDate, openPaywall, isFreeRestricted } = useSubscription();
+  const { isPro, isTrialing, isAdmin, trialDaysLeft, trialEndDate, renewalDate, openPaywall, isFreeRestricted } = useSubscription();
   const [cancelConfirm, setCancelConfirm] = useState(false);
   
   const [notifications, setNotifications] = useState(true);
@@ -43,7 +43,24 @@ const Settings: React.FC = () => {
               <CreditCard className="w-4 h-4" /> Subscription
             </h2>
 
-            {isPro && !isTrialing && (
+            {isAdmin && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-sky-500/15 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-sky-400" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-bold text-white">Admin Lifetime Access</p>
+                      <ProBadge size="sm" />
+                    </div>
+                    <p className="text-xs text-sky-400 font-medium">All features unlocked</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isPro && !isTrialing && !isAdmin && (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
