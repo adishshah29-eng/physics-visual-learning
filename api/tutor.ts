@@ -106,8 +106,8 @@ export default async function handler(req: Request) {
   const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   if (!geminiKey) {
     return new Response(
-      JSON.stringify({ error: 'Service unavailable' }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
+      JSON.stringify({ text: 'Error: GEMINI_API_KEY is missing from Vercel Environment Variables.' }),
+      { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': origin } }
     );
   }
 
@@ -128,7 +128,11 @@ export default async function handler(req: Request) {
     );
 
     if (!geminiRes.ok) {
-      throw new Error(`Gemini returned ${geminiRes.status}`);
+      const errorText = await geminiRes.text();
+      return new Response(
+        JSON.stringify({ text: `Google API Error (${geminiRes.status}): ${errorText.slice(0, 100)}` }),
+        { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': origin } }
+      );
     }
 
     const data = await geminiRes.json();
@@ -146,11 +150,11 @@ export default async function handler(req: Request) {
         },
       }
     );
-  } catch (err) {
+  } catch (err: any) {
     console.error('Gemini proxy error:', err);
     return new Response(
-      JSON.stringify({ text: "I'm having trouble connecting. Try again!" }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
+      JSON.stringify({ text: `Server Error: ${err.message}` }),
+      { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': origin } }
     );
   }
 }
